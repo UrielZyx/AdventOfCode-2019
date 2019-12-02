@@ -7,19 +7,20 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
+import intcode.operations.AddOperation;
+import intcode.operations.MultiplyOperation;
+
 public class Intcode {
 
 	enum OpCode {
-		EMPTY(0,(m,p)->false),
-		ADD(3,addOperation),
-		MULTIPLY(3,multiplyOperation),
-		HALT(0,(m,p)->false);
+		EMPTY((m,i)->-1),
+		ADD(new AddOperation()),
+		MULTIPLY(new MultiplyOperation()),
+		HALT((m,i)->-1);
 		
-		final int numberOfParameters;
-		final BiFunction<int[], List<Integer>, Boolean> operation;
+		final BiFunction<int[], Integer, Integer> operation;
 		
-		private OpCode(int numberOfParameters, BiFunction<int[], List<Integer>, Boolean> operation) {
-			this.numberOfParameters=numberOfParameters;
+		private OpCode(BiFunction<int[], Integer, Integer> operation) {
 			this.operation=operation;
 		}
 	}
@@ -32,14 +33,12 @@ public class Intcode {
 
 	public void runProgram() {
 		OpCode instruction;
-		List<Integer> params;
-		for (int i = 0;i< memory.length; i += instruction.numberOfParameters+1) {
+		int i = 0;
+				
+		while (i < memory.length) {
 			instruction=getOpcode(memory[i]);
-			params = new ArrayList<>();
-			for (int j = 1; j <= instruction.numberOfParameters; j++) {
-				params.add(i+j);
-			}
-			if(!instruction.operation.apply(memory, params)) {
+			i = instruction.operation.apply(memory, i); 
+			if(i<0) {
 				break;
 			}
 		}
@@ -72,18 +71,7 @@ public class Intcode {
 		return valueAtAddress(i, memory);
 	}
 		
-	private static int valueAtAddress(int i, int[] memory) {
+	public static int valueAtAddress(int i, int[] memory) {
 		return memory[memory[i]];
 	}
-
-	//Operations:
-
-	private static final BiFunction<int[], List<Integer>, Boolean> addOperation = (memory, params)->{
-		memory[memory[params.get(2)]] = valueAtAddress(params.get(0), memory) + valueAtAddress(params.get(1), memory);
-		return true;
-	};
-	private static final BiFunction<int[], List<Integer>, Boolean> multiplyOperation = (memory, params)->{
-		memory[memory[params.get(2)]] = valueAtAddress(params.get(0), memory) * valueAtAddress(params.get(1), memory);
-		return true;
-	};
 }
