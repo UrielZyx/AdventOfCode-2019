@@ -6,7 +6,7 @@ import java.util.Map;
 import intcode.Intcode;
 import intcode.IntcodeUtil;
 
-public class Part2 {
+public class Day2_2 {
 
 	public static void main(String[] args) {
 		for (int i = 0; i < 100; i++) {
