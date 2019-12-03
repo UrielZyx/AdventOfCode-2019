@@ -3,6 +3,13 @@
   <groupId>Day2</groupId>
   <artifactId>Day2</artifactId>
   <version>0.0.1</version>
+  <dependencies>
+  	<dependency>
+    	<groupId>org.javatuples</groupId>
+    	<artifactId>javatuples</artifactId>
+    	<version>1.2</version>
+	</dependency>
+  </dependencies>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <plugins>
