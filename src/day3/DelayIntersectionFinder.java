@@ -1,39 +1,65 @@
 package day3;
 
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.PriorityQueue;
 
 import org.javatuples.Pair;
+import org.javatuples.Triplet;
 
-public class DelayIntersectionFinder extends IntersectionFinder<Pair<Integer, Integer>> {
+public class DelayIntersectionFinder {
+	
+	private HashMap<Pair<Integer, Integer>,Integer> wire = new HashMap<>();
+	WirePath path1;
+	WirePath path2;
 
 	public DelayIntersectionFinder(WirePath path1, WirePath path2) {
-		super(path1, path2);
-		// TODO Auto-generated constructor stub
+		this.path1 = path1;
+		this.path2 = path2;
 	}
 
-	@Override
-	protected Comparator<Pair<Integer, Integer>> getComparator() {
-		// TODO Auto-generated method stub
-		return null;
+	private void trackPath(WirePath path, HashMap<Pair<Integer, Integer>, Integer> wire) {
+		Pair<Integer, Integer> currentPosition = Pair.with(0, 0);
+		int delay = 1;
+
+		for (Pair<Direction, Integer> turn : path) {
+			Pair<Integer, Integer> direction = turn.getValue0().directionVector;
+			for (int i = 1; i <= turn.getValue1(); i++, delay++) {
+				currentPosition = addVectors(currentPosition,direction);
+				wire.putIfAbsent(currentPosition, delay);
+			}
+		}
 	}
 
-	@Override
-	protected PriorityQueue<Pair<Integer, Integer>> createWireQueue() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	protected void trackPath(WirePath path, PriorityQueue wire) {
-		// TODO Auto-generated method stub
+	private int checkPath(WirePath path, HashMap<Pair<Integer, Integer>, Integer> wire) {
+		Pair<Integer, Integer> currentPosition = Pair.with(0, 0);
+		Integer minimumDelay = Integer.MAX_VALUE; 
+		int delay = 1;
 		
+		for (Pair<Direction, Integer> turn : path) {
+			Pair<Integer, Integer> direction = turn.getValue0().directionVector;
+			for (int i = 1; i <= turn.getValue1(); i++, delay++) {
+				currentPosition = addVectors(currentPosition,direction);
+				if (wire.containsKey(currentPosition)) {
+					if (wire.get(currentPosition) + delay < minimumDelay) {
+						minimumDelay=wire.get(currentPosition) + delay;
+					}
+				}
+			}
+		}
+		return minimumDelay;
+	}
+	
+	protected static Pair<Integer, Integer> addVectors(Pair<Integer, Integer> position,
+			Pair<Integer, Integer> direction) {
+		return Pair.with(
+				position.getValue0() + direction.getValue0(),
+				position.getValue1() + direction.getValue1());
 	}
 
-	@Override
-	protected int distance(Pair<Integer, Integer> p) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int findClosestIntersection() {
+		trackPath(path1, wire);
+		return checkPath(path2, wire);
 	}
 
 }
