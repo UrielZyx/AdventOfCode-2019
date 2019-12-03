@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import day3.DelayIntersectionFinder;
-import day3.IntersectionFinder;
 import day3.ManhattanIntersectionFinder;
 import day3.WirePath;
 

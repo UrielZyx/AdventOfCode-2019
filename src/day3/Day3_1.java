@@ -1,9 +1,5 @@
 package day3;
 
-import java.util.PriorityQueue;
-
-import org.javatuples.Pair;
-
 public class Day3_1 {
 	
 	public static void main(String[] args) {

@@ -1,61 +1,68 @@
 package day3;
 
-import java.util.Comparator;
-import java.util.PriorityQueue;
-import java.util.stream.IntStream;
+import java.util.HashMap;
 
 import org.javatuples.Pair;
-import org.javatuples.Tuple;
-import org.omg.CORBA.portable.ApplicationException;
 
-public abstract class IntersectionFinder<T> {
-
-	private PriorityQueue<T> wire1;
-	private PriorityQueue<T> wire2;
-	private final Comparator<T> comparator;
+public abstract class IntersectionFinder {
 	
+	private HashMap<Pair<Integer, Integer>,Integer> wire = new HashMap<>();
+	WirePath path1;
+	WirePath path2;
+
 	public IntersectionFinder(WirePath path1, WirePath path2) {
-		wire1 = createWireQueue();
-		wire2 = createWireQueue();
+		this.path1 = path1;
+		this.path2 = path2;
+	}
 
-		trackPath(path1, wire1);
-		trackPath(path2, wire2);
+	private void trackPath(WirePath path, HashMap<Pair<Integer, Integer>, Integer> wire) {
+		Pair<Integer, Integer> currentPosition = Pair.with(0, 0);
+		int delay = 1;
+
+		for (Pair<Direction, Integer> turn : path) {
+			Pair<Integer, Integer> direction = turn.getValue0().directionVector;
+			for (int i = 1; i <= turn.getValue1(); i++, delay++) {
+				currentPosition = addVectors(currentPosition,direction);
+				wire.putIfAbsent(currentPosition, distance(currentPosition, delay));
+			}
+		}
+	}
+
+	private int checkPath(WirePath path, HashMap<Pair<Integer, Integer>, Integer> wire) {
+		Pair<Integer, Integer> currentPosition = Pair.with(0, 0);
+		Integer minimumDelay = Integer.MAX_VALUE; 
+		int delay = 1;
 		
-		comparator = getComparator();
-	}
-
-	public int findClosestIntersection() {
-		T closestIntersection = searchQueues(wire1, wire2);
-		return distance(closestIntersection);
-	}
-
-	protected T searchQueues(PriorityQueue<T> wire1, PriorityQueue<T> wire2) {
-		T p1 = wire1.poll(), p2=wire2.poll();
-		try {
-			while (!wire1.isEmpty() || !wire2.isEmpty()) {
-				if (comparator.compare(p1,p2) < 0) {
-					p1 = wire1.poll();
-				} else if (comparator.compare(p1,p2) > 0) {
-					p2 = wire2.poll();
-				} else  if (p1.equals(p2)){
-					return p1;
-				}
-				else {
-					throw new ApplicationException("Comparator isn't full!", null);
+		for (Pair<Direction, Integer> turn : path) {
+			Pair<Integer, Integer> direction = turn.getValue0().directionVector;
+			for (int i = 1; i <= turn.getValue1(); i++, delay++) {
+				currentPosition = addVectors(currentPosition,direction);
+				if (wire.containsKey(currentPosition)) {
+					if (totalDistance(wire, currentPosition, delay) < minimumDelay) {
+						minimumDelay = totalDistance(wire, currentPosition, delay);
+					}
 				}
 			}
 		}
-		catch (Exception e) {
-			return null;
-		}
-		return null;
+		return minimumDelay;
 	}
 	
-	protected abstract Comparator<T> getComparator();
-	
-	protected abstract PriorityQueue<T> createWireQueue();
-	
-	protected abstract void trackPath(WirePath path, PriorityQueue wire);
+	protected static Pair<Integer, Integer> addVectors(Pair<Integer, Integer> position,
+			Pair<Integer, Integer> direction) {
+		return Pair.with(
+				position.getValue0() + direction.getValue0(),
+				position.getValue1() + direction.getValue1());
+	}
 
-	protected abstract int distance(T p);
+	public int findClosestIntersection() {
+		trackPath(path1, wire);
+		return checkPath(path2, wire);
+	}
+
+	protected int totalDistance(HashMap<Pair<Integer, Integer>, Integer> wire, Pair<Integer, Integer> currentPosition,
+			int delay) {
+		return distance(currentPosition, delay);
+	}
+
+	protected abstract Integer distance(Pair<Integer, Integer> currentPosition, int delay);
 }
