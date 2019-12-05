@@ -59,4 +59,24 @@ public class IntCodeTest {
 		assertEquals(2, program.result(4));
 	}
 
+	@Test
+	public void immediateValueTest() {
+		int[] memory = new int[] {1002,4,3,4,33};
+		IntcodeMachine program = new IntcodeMachine(memory);
+		
+		program.runProgram();
+
+		assertEquals(99, program.result(4));
+	}
+
+	@Test
+	public void negativesTest() {
+		int[] memory = new int[] {1101,100,-1,4,0};
+		IntcodeMachine program = new IntcodeMachine(memory);
+		
+		program.runProgram();
+
+		assertEquals(99, program.result(4));
+	}
+
 }
