@@ -1,11 +1,8 @@
 package day5;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 import intcode.IntcodeMachine;
-import intcode.IntcodeUtil;
 
 public class Day5_2 {
 

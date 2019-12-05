@@ -14,7 +14,7 @@ public class InputOperation extends AbstractOperation{
 	}
 	
 	@Override
-	protected void doOperation(Params params, IntcodeMachine machine, int modes) {
+	protected void doOperation(Params params, IntcodeMachine machine) {
 		
 		machine.setPositionValue(params.getWriteParam(0), machine.getNextInput());
 	}

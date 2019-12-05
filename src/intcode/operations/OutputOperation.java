@@ -14,9 +14,9 @@ public class OutputOperation extends AbstractOperation{
 	}
 	
 	@Override
-	protected void doOperation(Params params, IntcodeMachine machine, int modes) {
+	protected void doOperation(Params params, IntcodeMachine machine) {
 		
-		machine.addOutput(params.getReadParam(machine, 0, modes));
+		machine.addOutput(params.getReadParam(0));
 	}
 	
 }

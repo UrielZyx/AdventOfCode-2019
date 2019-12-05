@@ -124,12 +124,12 @@ public abstract class AbstractOperation implements BiFunction<IntcodeMachine, In
 
 	@Override
 	public Integer apply (IntcodeMachine machine, Integer i) {
-		Params params = getParams(machine, i, getNumberOfReadParameters(), getNumberOfWriteParameters());
-		doOperation(params,machine,getParamsModes(machine, i));
+		Params params = getParams(machine, i, getNumberOfReadParameters(), getNumberOfWriteParameters(), getParamsModes(machine, i));
+		doOperation(params,machine);
 		return getNewInstructionCounter(i);
 	}
 
-	protected abstract void doOperation(Params params, IntcodeMachine machine, int parameterMode);
+	protected abstract void doOperation(Params params, IntcodeMachine machine);
 
 	protected Integer getNewInstructionCounter(int i) {
 		return i + getNumberOfStepsToSkip();
@@ -155,11 +155,14 @@ public abstract class AbstractOperation implements BiFunction<IntcodeMachine, In
 		this.numberOfWriteParameters=number;
 	}
 
-	protected static Params getParams(IntcodeMachine machine, Integer i, int numberOfReadParameters, int numberOfWriteParameters) {
+	protected static Params getParams(IntcodeMachine machine, Integer i, int numberOfReadParameters, int numberOfWriteParameters, int modes) {
 		List<Integer> readParams = new ArrayList<>();
-		int j;
+		int j, position;
 		for (j = 1; j <= numberOfReadParameters; j++) {
-			readParams.add(i+j);
+			position = i+j;
+			position = machine.getValue(position, modes % 10);
+			modes /= 10;
+			readParams.add(position);
 		}
 		List<Integer> writeParams = new ArrayList<>();
 		for (; j <= numberOfReadParameters + numberOfWriteParameters; j++) {

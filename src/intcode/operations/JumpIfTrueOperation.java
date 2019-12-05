@@ -16,12 +16,12 @@ public class JumpIfTrueOperation extends AbstractOperation{
 	}
 	
 	@Override
-	protected void doOperation(Params params, IntcodeMachine machine, int modes) {
+	protected void doOperation(Params params, IntcodeMachine machine) {
 		
 		nextInstructionCounter = null;
 		
-		if (params.getReadParam(machine, 0, modes % 10) != 0) {
-			nextInstructionCounter = params.getReadParam(machine, 1, modes / 10);
+		if (params.getReadParam(0) != 0) {
+			nextInstructionCounter = params.getReadParam(1);
 		}
 	}
 	

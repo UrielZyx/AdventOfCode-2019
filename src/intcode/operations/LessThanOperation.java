@@ -14,10 +14,10 @@ public class LessThanOperation extends AbstractOperation{
 	}
 	
 	@Override
-	protected void doOperation(Params params, IntcodeMachine machine, int modes) {
+	protected void doOperation(Params params, IntcodeMachine machine) {
 		
 		machine.setPositionValue(
 				params.getWriteParam(0), 
-				params.getReadParam(machine, 0, modes % 10) < params.getReadParam(machine, 1, modes / 10)? 1: 0);
+				params.getReadParam(0) < params.getReadParam(1)? 1: 0);
 	}
 }
