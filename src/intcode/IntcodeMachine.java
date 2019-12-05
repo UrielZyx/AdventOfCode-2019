@@ -7,23 +7,11 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
+import intcode.operations.AbstractOperation.OpCode;
 import intcode.operations.AddOperation;
 import intcode.operations.MultiplyOperation;
 
 public class IntcodeMachine {
-
-	enum OpCode {
-		EMPTY((m,i)->-1),
-		ADD(new AddOperation()),
-		MULTIPLY(new MultiplyOperation()),
-		HALT((m,i)->-1);
-		
-		final BiFunction<IntcodeMachine, Integer, Integer> operation;
-		
-		private OpCode(BiFunction<IntcodeMachine, Integer, Integer> operation) {
-			this.operation=operation;
-		}
-	}
 	
 	public enum ParametersMode {
 		POSITION (IntcodeUtil::getPositionValue),
@@ -37,9 +25,17 @@ public class IntcodeMachine {
 	}
 	
 	private int[] memory;
+	private List<Integer> input;
+	private List<Integer> output;
 	
 	public IntcodeMachine(int[] memory) {
+		this(memory, new ArrayList<>());
+	}
+	
+	public IntcodeMachine(int[] memory, List<Integer> input) {
 		this.memory=memory;
+		this.input = input;
+		this.output = new ArrayList<>();
 	}
 
 	public void runProgram() {
@@ -95,6 +91,22 @@ public class IntcodeMachine {
 		return ParametersMode.values()[mode].getValue.apply(this, i);
 	}
 	
+	public List<Integer> getInput() {
+		return input;
+	}
+
+	public Integer getOutput(int i) {
+		List<Integer> out = getOutput();
+		if (i > out.size()) {
+			return null;
+		}
+		return getOutput().get(i);
+	}
+
+	public List<Integer> getOutput() {
+		return output;
+	}
+
 	@Override
 	public String toString() {
 		return memory.toString();

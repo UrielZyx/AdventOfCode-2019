@@ -1,6 +1,9 @@
 package Tests;
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import org.junit.Test;
 
 import intcode.IntcodeMachine;
@@ -79,4 +82,14 @@ public class IntCodeTest {
 		assertEquals(99, program.result(4));
 	}
 
+	@Test
+	public void inputOutputTest() {
+		int[] memory = new int[] {3,0,4,0,99};
+		IntcodeMachine program = new IntcodeMachine(memory, Arrays.asList(7));
+		
+		program.runProgram();
+
+		assertEquals(1, program.getOutput().size());
+		assertEquals(7, (int)program.getOutput().get(0));
+	}
 }

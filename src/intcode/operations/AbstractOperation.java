@@ -10,6 +10,21 @@ import intcode.IntcodeMachine;
 
 public abstract class AbstractOperation implements BiFunction<IntcodeMachine, Integer, Integer> {
 
+	public enum OpCode {
+		EMPTY((m,i)->-1),
+		ADD(new AddOperation()),
+		MULTIPLY(new MultiplyOperation()),
+		INPUT((m,i)->-1),
+		OUTPUT((m,i)->-1),
+		HALT((m,i)->-1);
+		
+		public final BiFunction<IntcodeMachine, Integer, Integer> operation;
+		
+		private OpCode(BiFunction<IntcodeMachine, Integer, Integer> operation) {
+			this.operation=operation;
+		}
+	}
+
 	private int numberOfReadParameters;
 	private int numberOfWriteParameters;
 
