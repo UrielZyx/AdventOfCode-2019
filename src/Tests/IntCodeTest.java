@@ -92,4 +92,147 @@ public class IntCodeTest {
 		assertEquals(1, program.getOutput().size());
 		assertEquals(7, (int)program.getOutput().get(0));
 	}
+
+	@Test
+	public void EqualsReturnsTrueWhenImmediateEqualsTest() {
+		int[] memory = new int[] {3,3,1108,-1,8,3,4,3,99};
+		IntcodeMachine program = new IntcodeMachine(memory, Arrays.asList(8));
+		
+		program.runProgram();
+
+		assertEquals(1, program.getOutput().size());
+		assertEquals(1, (int)program.getOutput().get(0));
+	}
+
+	@Test
+	public void EqualsReturnsFalseWhenImmediateNotEqualsTest() {
+		int[] memory = new int[] {3,3,1108,-1,8,3,4,3,99};
+		IntcodeMachine program = new IntcodeMachine(memory, Arrays.asList(7));
+		
+		program.runProgram();
+
+		assertEquals(1, program.getOutput().size());
+		assertEquals(0, (int)program.getOutput().get(0));
+	}
+
+	@Test
+	public void LessThanReturnsTrueWhenImmediateLessThanTest() {
+		int[] memory = new int[] {3,3,1107,-1,8,3,4,3,99};
+		IntcodeMachine program = new IntcodeMachine(memory, Arrays.asList(7));
+		
+		program.runProgram();
+
+		assertEquals(1, program.getOutput().size());
+		assertEquals(1, (int)program.getOutput().get(0));
+	}
+
+	@Test
+	public void LessThanReturnsFalseWhenImmediateEqualsTest() {
+		int[] memory = new int[] {3,3,1107,-1,8,3,4,3,99};
+		IntcodeMachine program = new IntcodeMachine(memory, Arrays.asList(8));
+		
+		program.runProgram();
+
+		assertEquals(1, program.getOutput().size());
+		assertEquals(0, (int)program.getOutput().get(0));
+	}
+
+	@Test
+	public void LessThanReturnsFalseWhenImmediateGreaterTest() {
+		int[] memory = new int[] {3,3,1107,-1,8,3,4,3,99};
+		IntcodeMachine program = new IntcodeMachine(memory, Arrays.asList(9));
+		
+		program.runProgram();
+
+		assertEquals(1, program.getOutput().size());
+		assertEquals(0, (int)program.getOutput().get(0));
+	}
+
+	@Test
+	public void EqualsReturnsTrueWhenPositionEqualsTest() {
+		int[] memory = new int[] {3,9,8,9,10,9,4,9,99,-1,8};
+		IntcodeMachine program = new IntcodeMachine(memory, Arrays.asList(8));
+		
+		program.runProgram();
+
+		assertEquals(1, program.getOutput().size());
+		assertEquals(1, (int)program.getOutput().get(0));
+	}
+
+	@Test
+	public void EqualsReturnsFalseWhenPositionNotEqualsTest() {
+		int[] memory = new int[] {3,9,8,9,10,9,4,9,99,-1,8};
+		IntcodeMachine program = new IntcodeMachine(memory, Arrays.asList(7));
+		
+		program.runProgram();
+
+		assertEquals(1, program.getOutput().size());
+		assertEquals(0, (int)program.getOutput().get(0));
+	}
+
+	@Test
+	public void LessThanReturnsTrueWhenPositionLessThanTest() {
+		int[] memory = new int[] {3,9,7,9,10,9,4,9,99,-1,8};
+		IntcodeMachine program = new IntcodeMachine(memory, Arrays.asList(7));
+		
+		program.runProgram();
+
+		assertEquals(1, program.getOutput().size());
+		assertEquals(1, (int)program.getOutput().get(0));
+	}
+
+	@Test
+	public void LessThanReturnsFalseWhenPositionEqualsTest() {
+		int[] memory = new int[] {3,9,7,9,10,9,4,9,99,-1,8};
+		IntcodeMachine program = new IntcodeMachine(memory, Arrays.asList(8));
+		
+		program.runProgram();
+
+		assertEquals(1, program.getOutput().size());
+		assertEquals(0, (int)program.getOutput().get(0));
+	}
+
+	@Test
+	public void LessThanReturnsFalseWhenPositionGreaterTest() {
+		int[] memory = new int[] {3,9,7,9,10,9,4,9,99,-1,8};
+		IntcodeMachine program = new IntcodeMachine(memory, Arrays.asList(9));
+		
+		program.runProgram();
+
+		assertEquals(1, program.getOutput().size());
+		assertEquals(0, (int)program.getOutput().get(0));
+	}
+
+	@Test
+	public void RecognizesLessThanTest() {
+		int[] memory = new int[] {3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99};
+		IntcodeMachine program = new IntcodeMachine(memory, Arrays.asList(7));
+		
+		program.runProgram();
+
+		assertEquals(1, program.getOutput().size());
+		assertEquals(999, (int)program.getOutput().get(0));
+	}
+
+	@Test
+	public void RecognizesEqualsTest() {
+		int[] memory = new int[] {3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99};
+		IntcodeMachine program = new IntcodeMachine(memory, Arrays.asList(8));
+		
+		program.runProgram();
+
+		assertEquals(1, program.getOutput().size());
+		assertEquals(1000, (int)program.getOutput().get(0));
+	}
+
+	@Test
+	public void RecognizesGreaterThanTest() {
+		int[] memory = new int[] {3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99};
+		IntcodeMachine program = new IntcodeMachine(memory, Arrays.asList(9));
+		
+		program.runProgram();
+
+		assertEquals(1, program.getOutput().size());
+		assertEquals(1001, (int)program.getOutput().get(0));
+	}
 }
