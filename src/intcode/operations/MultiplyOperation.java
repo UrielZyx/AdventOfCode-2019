@@ -1,14 +1,14 @@
 package intcode.operations;
 
-import java.util.List;
+import java.util.Arrays;
 
 import intcode.IntcodeMachine;
+import intcode.operations.Params.ParamType;
 
 public class MultiplyOperation extends AbstractOperation{
 	
 	public MultiplyOperation() {
-		setNumberOfReadParameters(2);
-		setNumberOfWriteParameters(1);
+		setParameters(Arrays.asList(ParamType.READ, ParamType.READ, ParamType.WRITE));
 	}
 	
 	@Override

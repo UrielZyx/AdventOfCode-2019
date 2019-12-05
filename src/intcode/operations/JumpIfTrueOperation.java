@@ -1,18 +1,16 @@
 package intcode.operations;
 
-import java.util.List;
-
-import org.javatuples.Pair;
+import java.util.Arrays;
 
 import intcode.IntcodeMachine;
+import intcode.operations.Params.ParamType;
 
 public class JumpIfTrueOperation extends AbstractOperation{
 	
 	Integer nextInstructionCounter = null;
 	
 	public JumpIfTrueOperation() {
-		setNumberOfReadParameters(2);
-		setNumberOfWriteParameters(0);
+		setParameters(Arrays.asList(ParamType.READ, ParamType.READ));
 	}
 	
 	@Override

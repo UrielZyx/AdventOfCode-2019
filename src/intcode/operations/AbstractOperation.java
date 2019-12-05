@@ -7,6 +7,7 @@ import java.util.function.BiFunction;
 import org.javatuples.Pair;
 
 import intcode.IntcodeMachine;
+import intcode.operations.Params.ParamType;
 
 public abstract class AbstractOperation implements BiFunction<IntcodeMachine, Integer, Integer> {
 
@@ -119,12 +120,11 @@ public abstract class AbstractOperation implements BiFunction<IntcodeMachine, In
 		}
 	}
 
-	private int numberOfReadParameters;
-	private int numberOfWriteParameters;
+	private List<ParamType> requiredParameters;
 
 	@Override
 	public Integer apply (IntcodeMachine machine, Integer i) {
-		Params params = getParams(machine, i, getNumberOfReadParameters(), getNumberOfWriteParameters(), getParamsModes(machine, i));
+		Params params = getParams(machine, i, getRequiredParameters(), getParamsModes(machine, i));
 		doOperation(params,machine);
 		return getNewInstructionCounter(i);
 	}
@@ -136,39 +136,35 @@ public abstract class AbstractOperation implements BiFunction<IntcodeMachine, In
 	}
 
 	protected int getNumberOfStepsToSkip() {
-		return getNumberOfReadParameters() + getNumberOfWriteParameters() + 1;
+		return getNumberOfRequiredParameters() + 1;
 	}
 
-	protected int getNumberOfReadParameters() {
-		return numberOfReadParameters;
+	protected int getNumberOfRequiredParameters() {
+		return getRequiredParameters().size();
 	}
 
-	protected void setNumberOfReadParameters(int number) {
-		this.numberOfReadParameters=number;
+	protected List<ParamType> getRequiredParameters() {
+		return requiredParameters;
 	}
 
-	protected int getNumberOfWriteParameters() {
-		return numberOfWriteParameters;
+	protected void setParameters(List<ParamType> params) {
+		requiredParameters = params;
 	}
 
-	protected void setNumberOfWriteParameters(int number) {
-		this.numberOfWriteParameters=number;
-	}
+	protected static Params getParams(IntcodeMachine machine, Integer i, List<ParamType> requiresParams, int modes) {
+		Params params = new Params();
+		int j = 0, value;
 
-	protected static Params getParams(IntcodeMachine machine, Integer i, int numberOfReadParameters, int numberOfWriteParameters, int modes) {
-		List<Integer> readParams = new ArrayList<>();
-		int j, position;
-		for (j = 1; j <= numberOfReadParameters; j++) {
-			position = i+j;
-			position = machine.getValue(position, modes % 10);
-			modes /= 10;
-			readParams.add(position);
+		for (ParamType type : requiresParams) {
+			value = i + ++j;
+			if (type.equals(ParamType.READ)) {
+				value = machine.getValue(value, modes % 10);
+				modes /= 10;
+			}
+			params.addParam(type, value);
 		}
-		List<Integer> writeParams = new ArrayList<>();
-		for (; j <= numberOfReadParameters + numberOfWriteParameters; j++) {
-			writeParams.add(i+j);
-		}
-		return new Params(readParams, writeParams);
+
+		return params;
 	}
 
 	protected int immediateValue(int i, IntcodeMachine machine) {

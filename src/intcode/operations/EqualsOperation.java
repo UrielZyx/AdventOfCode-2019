@@ -1,16 +1,14 @@
 package intcode.operations;
 
-import java.util.List;
-
-import org.javatuples.Pair;
+import java.util.Arrays;
 
 import intcode.IntcodeMachine;
+import intcode.operations.Params.ParamType;
 
 public class EqualsOperation extends AbstractOperation{
 	
 	public EqualsOperation() {
-		setNumberOfReadParameters(2);
-		setNumberOfWriteParameters(1);
+		setParameters(Arrays.asList(ParamType.READ, ParamType.READ, ParamType.WRITE));
 	}
 	
 	@Override
