@@ -16,6 +16,6 @@ public class Day2_1 {
 		IntcodeUtil.runConfigurationSetup(memory,config);
 		IntcodeMachine program = new IntcodeMachine(memory);
 		program.runProgram();
-		program.printResult();
+		program.printMemory0();
 	}
 }

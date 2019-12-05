@@ -14,8 +14,8 @@ public abstract class AbstractOperation implements BiFunction<IntcodeMachine, In
 		EMPTY((m,i)->-1),
 		ADD(new AddOperation()),
 		MULTIPLY(new MultiplyOperation()),
-		INPUT((m,i)->-1),
-		OUTPUT((m,i)->-1),
+		INPUT(new InputOperation()),
+		OUTPUT(new OutputOperation()),
 		HALT((m,i)->-1);
 		
 		public final BiFunction<IntcodeMachine, Integer, Integer> operation;

@@ -26,7 +26,8 @@ public class IntcodeMachine {
 	
 	private int[] memory;
 	private List<Integer> input;
-	private List<Integer> output;
+	private List<Integer> output = new ArrayList<>();
+	int inputCounter = 0;
 	
 	public IntcodeMachine(int[] memory) {
 		this(memory, new ArrayList<>());
@@ -35,7 +36,6 @@ public class IntcodeMachine {
 	public IntcodeMachine(int[] memory, List<Integer> input) {
 		this.memory=memory;
 		this.input = input;
-		this.output = new ArrayList<>();
 	}
 
 	public void runProgram() {
@@ -51,16 +51,12 @@ public class IntcodeMachine {
 		}
 	}
 
-	public void printResult() {
-		System.out.println(result());
+	public void printMemory0() {
+		System.out.println(memory0());
 	}
 
-	public int result() {
-		return result(0);
-	}
-	
-	public int result(int i) {
-		return getImmediateValue(i);
+	public int memory0() {
+		return getImmediateValue(0);
 	}
 
 	public void printAll() {
@@ -91,6 +87,10 @@ public class IntcodeMachine {
 		return ParametersMode.values()[mode].getValue.apply(this, i);
 	}
 	
+	public int getNextInput() {
+		return getInput().get(inputCounter++);
+	}
+	
 	public List<Integer> getInput() {
 		return input;
 	}
@@ -101,6 +101,10 @@ public class IntcodeMachine {
 			return null;
 		}
 		return getOutput().get(i);
+	}
+	
+	public void addOutput(int value) {
+		getOutput().add(value);
 	}
 
 	public List<Integer> getOutput() {

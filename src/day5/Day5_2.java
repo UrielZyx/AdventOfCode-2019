@@ -1,4 +1,4 @@
-package day2;
+package day5;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,7 +6,7 @@ import java.util.Map;
 import intcode.IntcodeMachine;
 import intcode.IntcodeUtil;
 
-public class Day2_2 {
+public class Day5_2 {
 
 	public static void main(String[] args) {
 		for (int i = 0; i < 100; i++) {
