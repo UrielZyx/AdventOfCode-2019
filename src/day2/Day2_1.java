@@ -3,7 +3,7 @@ package day2;
 import java.util.HashMap;
 import java.util.Map;
 
-import intcode.Intcode;
+import intcode.IntcodeMachine;
 import intcode.IntcodeUtil;
 
 public class Day2_1 {
@@ -14,7 +14,7 @@ public class Day2_1 {
 		config.put(1, 12);
 		config.put(2, 2);
 		IntcodeUtil.runConfigurationSetup(memory,config);
-		Intcode program = new Intcode(memory);
+		IntcodeMachine program = new IntcodeMachine(memory);
 		program.runProgram();
 		program.printResult();
 	}

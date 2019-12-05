@@ -9,4 +9,12 @@ public class IntcodeUtil {
 			memory[i]=configurations.get(i);
 		}
 	}
+	
+	public static int getPositionValue(IntcodeMachine machine, int i) {
+		return machine.getPositionValue(i);
+	}
+	
+	public static int getImmediateValue(IntcodeMachine machine, int i) {
+		return machine.getImmediateValue(i);
+	}
 }

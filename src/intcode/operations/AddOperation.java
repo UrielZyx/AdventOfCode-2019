@@ -2,15 +2,23 @@ package intcode.operations;
 
 import java.util.List;
 
+import org.javatuples.Pair;
+
+import intcode.IntcodeMachine;
+
 public class AddOperation extends AbstractOperation{
 	
 	public AddOperation() {
-		setNumberOfParameters(3);
+		setNumberOfReadParameters(2);
+		setNumberOfWriteParameters(1);
 	}
 	
 	@Override
-	protected void doOperation(List<Integer> params, int[] memory) {
-		memory[memory[params.get(2)]] = valueAtAddress(params.get(0), memory) + valueAtAddress(params.get(1), memory);
+	protected void doOperation(Params params, IntcodeMachine machine, int modes) {
+		
+		machine.setPositionValue(
+				params.getWriteParam(0), 
+				params.getReadParam(machine, 0, modes % 10) + params.getReadParam(machine, 1, modes / 10));
 	}
 	
 }

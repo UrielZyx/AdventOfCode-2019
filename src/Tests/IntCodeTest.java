@@ -3,61 +3,60 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import intcode.Intcode;
-import junit.framework.Assert;
+import intcode.IntcodeMachine;
 
 public class IntCodeTest {
 
 	@Test
 	public void additionTest() {
 		int[] memory = new int[] {1,0,0,0,99};
-		Intcode program = new Intcode(memory);
+		IntcodeMachine program = new IntcodeMachine(memory);
 		
 		program.runProgram();
 		
-		assertEquals(program.result(0), 2);
+		assertEquals(2, program.result(0));
 	}
 
 	@Test
 	public void multiplicationTest() {
 		int[] memory = new int[] {2,3,0,3,99};
-		Intcode program = new Intcode(memory);
+		IntcodeMachine program = new IntcodeMachine(memory);
 		
 		program.runProgram();
 		
-		assertEquals(program.result(3), 6);
+		assertEquals(6, program.result(3));
 	}
 
 	@Test
 	public void multiplicationWithFarPlacesTest() {
 		int[] memory = new int[] {2,4,4,5,99,0};
-		Intcode program = new Intcode(memory);
+		IntcodeMachine program = new IntcodeMachine(memory);
 		
 		program.runProgram();
 		
-		assertEquals(program.result(5), 9801);
+		assertEquals(9801, program.result(5));
 	}
 
 	@Test
 	public void multipleInstructionsTest() {
 		int[] memory = new int[] {1,9,10,3,2,3,11,0,99,30,40,50};
-		Intcode program = new Intcode(memory);
+		IntcodeMachine program = new IntcodeMachine(memory);
 		
 		program.runProgram();
 
-		assertEquals(program.result(0), 3500);
-		assertEquals(program.result(3), 70);
+		assertEquals(3500, program.result(0));
+		assertEquals(70, program.result(3));
 	}
 
 	@Test
 	public void opCodeOverrideTest() {
 		int[] memory = new int[] {1,1,1,4,99,5,6,0,99};
-		Intcode program = new Intcode(memory);
+		IntcodeMachine program = new IntcodeMachine(memory);
 		
 		program.runProgram();
 
-		assertEquals(program.result(0), 30);
-		assertEquals(program.result(4), 2);
+		assertEquals(30, program.result(0));
+		assertEquals(2, program.result(4));
 	}
 
 }

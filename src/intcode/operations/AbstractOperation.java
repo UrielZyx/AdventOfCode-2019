@@ -4,43 +4,70 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 
-import intcode.Intcode;
+import org.javatuples.Pair;
 
-public abstract class AbstractOperation implements BiFunction<int[], Integer, Integer> {
+import intcode.IntcodeMachine;
 
-	private int numberOfParameters;
+public abstract class AbstractOperation implements BiFunction<IntcodeMachine, Integer, Integer> {
+
+	private int numberOfReadParameters;
+	private int numberOfWriteParameters;
 
 	@Override
-	public Integer apply(int[] memory, Integer i) {
-		List<Integer> params = getParams(memory, i, getNumberOfParameters());
-		doOperation(params,memory);
-		return getNewInstructionPointer(i);
+	public Integer apply (IntcodeMachine machine, Integer i) {
+		Params params = getParams(machine, i, getNumberOfReadParameters(), getNumberOfWriteParameters());
+		doOperation(params,machine,getParamsModes(machine, i));
+		return getNewInstructionCounter(i);
 	}
 
-	protected abstract void doOperation(List<Integer> params, int[] memory);
+	protected abstract void doOperation(Params params, IntcodeMachine machine, int parameterMode);
 
-	protected int getNumberOfParameters() {
-		return numberOfParameters;
+	protected int getNumberOfReadParameters() {
+		return numberOfReadParameters;
 	}
 
-	protected void setNumberOfParameters(int numberOfParameters) {
-		this.numberOfParameters=numberOfParameters;
+	protected void setNumberOfReadParameters(int number) {
+		this.numberOfReadParameters=number;
 	}
 
-	protected Integer getNewInstructionPointer(int i) {
-		return i + getNumberOfParameters() + 1;
+	protected int getNumberOfWriteParameters() {
+		return numberOfWriteParameters;
 	}
 
-	protected static List<Integer> getParams(int[] memory, Integer i, int numberOfParameters) {
-		List<Integer> params = new ArrayList<>();
-		for (int j = 1; j <= numberOfParameters; j++) {
-			params.add(i+j);
+	protected void setNumberOfWriteParameters(int number) {
+		this.numberOfWriteParameters=number;
+	}
+
+	protected Integer getNewInstructionCounter(int i) {
+		return i + getNumberOfReadParameters() + getNumberOfWriteParameters() + 1;
+	}
+
+	protected static Params getParams(IntcodeMachine machine, Integer i, int numberOfReadParameters, int numberOfWriteParameters) {
+		List<Integer> readParams = new ArrayList<>();
+		int j;
+		for (j = 1; j <= numberOfReadParameters; j++) {
+			readParams.add(i+j);
 		}
-		return params;
+		List<Integer> writeParams = new ArrayList<>();
+		for (; j <= numberOfReadParameters + numberOfWriteParameters; j++) {
+			writeParams.add(i+j);
+		}
+		return new Params(readParams, writeParams);
 	}
 
-	protected int valueAtAddress(int i, int[] memory) {
-		return Intcode.valueAtAddress(i, memory);
+	protected int immediateValue(int i, IntcodeMachine machine) {
+		return machine.getImmediateValue(i);
 	}
 
+	protected int positionValue(int i, IntcodeMachine machine) {
+		return machine.getPositionValue(i);
+	}
+
+	protected int getValue(IntcodeMachine machine, int i, int mode) {
+		return machine.getValue(i, mode);
+	}
+
+	private int getParamsModes(IntcodeMachine machine, int i) {
+		return machine.getImmediateValue(i) / 100;
+	}
 }
