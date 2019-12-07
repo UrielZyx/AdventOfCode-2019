@@ -24,27 +24,27 @@ public class IntcodeMachine {
 	private List<Integer> input;
 	private List<Integer> output = new ArrayList<>();
 	int inputCounter = 0;
+	private int index = 0;
 	
 	public IntcodeMachine(int[] memory) {
-		this(memory, new ArrayList<>());
-	}
-	
-	public IntcodeMachine(int[] memory, List<Integer> input) {
 		this.memory=memory;
-		this.input = input;
 	}
 
-	public void runProgram() {
+	public boolean runProgram() {
 		OpCode instruction;
-		int i = 0;
+		inputCounter = 0;
 				
-		while (i < memory.length) {
-			instruction=getOpcode(getImmediateValue(i));
-			i = instruction.operation.apply(this, i); 
-			if(i<0) {
+		while (index < memory.length) {
+			instruction=getOpcode();
+			if (noAvailableInput(instruction)) {
+				break;
+			}
+			index = instruction.operation.apply(this, index); 
+			if(index < 0) {
 				break;
 			}
 		}
+		return index < 0;
 	}
 
 	public void printMemory0() {
@@ -57,14 +57,6 @@ public class IntcodeMachine {
 
 	public void printAll() {
 		IntStream.of(memory).forEach(i -> System.out.print(i+", "));
-	}
-
-	private OpCode getOpcode(int i) {
-		int operation = i % 100;
-		if (operation<=OpCode.HALT.ordinal()) {
-			return OpCode.values()[operation];
-		}
-		return OpCode.EMPTY;
 	}
 		
 	public int getPositionValue(int i) {
@@ -85,6 +77,11 @@ public class IntcodeMachine {
 	
 	public int getNextInput() {
 		return getInput().get(inputCounter++);
+	}
+
+	public IntcodeMachine setInput(List<Integer> input) {
+		this.input = input;
+		return this;
 	}
 	
 	public List<Integer> getInput() {
@@ -110,5 +107,17 @@ public class IntcodeMachine {
 	@Override
 	public String toString() {
 		return memory.toString();
+	}
+
+	private OpCode getOpcode() {
+		int operation = getImmediateValue(index) % 100;
+		if (operation<=OpCode.HALT.ordinal()) {
+			return OpCode.values()[operation];
+		}
+		return OpCode.EMPTY;
+	}
+
+	private boolean noAvailableInput(OpCode instruction) {
+		return instruction.equals(OpCode.INPUT) && inputCounter >= input.size();
 	}
 }
