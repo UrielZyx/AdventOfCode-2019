@@ -3,13 +3,9 @@ package intcode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.IntStream;
 
 import intcode.operations.AbstractOperation.OpCode;
-import intcode.operations.AddOperation;
-import intcode.operations.MultiplyOperation;
 
 public class IntcodeMachine {
 	
