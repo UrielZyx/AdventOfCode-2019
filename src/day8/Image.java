@@ -36,4 +36,25 @@ public class Image {
 		return count[1] * count[2];
 	}
 
+	public int[][] getFinalImage() {
+		int[][] finalImage = new int[height][width];
+
+		for (int j = 0; j < height; j++) {
+			for (int k = 0; k < width; k++) {
+				finalImage[j][k] = 2;
+			}
+		}
+		
+		for (int i = 0; i < layers; i++) {
+			for (int j = 0; j < height; j++) {
+				for (int k = 0; k < width; k++) {
+					if (finalImage[j][k] == 2) {
+						finalImage[j][k] = image[i][j][k];
+					}
+				}
+			}
+		}
+		return finalImage;
+	}
+
 }
