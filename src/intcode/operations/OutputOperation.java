@@ -1,22 +1,20 @@
 package intcode.operations;
 
-import java.util.List;
-
-import org.javatuples.Pair;
+import java.util.Arrays;
 
 import intcode.IntcodeMachine;
+import intcode.operations.Params.ParamType;
 
 public class OutputOperation extends AbstractOperation{
 	
 	public OutputOperation() {
-		setNumberOfReadParameters(1);
-		setNumberOfWriteParameters(0);
+		setParameters(Arrays.asList(ParamType.READ));
 	}
 	
 	@Override
-	protected void doOperation(Params params, IntcodeMachine machine, int modes) {
+	protected void doOperation(Params params, IntcodeMachine machine) {
 		
-		machine.addOutput(params.getReadParam(machine, 0, modes));
+		machine.addOutput(params.getReadParam(0));
 	}
 	
 }

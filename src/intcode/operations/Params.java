@@ -1,21 +1,23 @@
 package intcode.operations;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-import org.javatuples.Pair;
-
-import intcode.IntcodeMachine;
+import java.util.Map;
 
 public class Params {
 	
-	Pair<List<Integer>, List<Integer>> pair;
-
-	public Params(List<Integer> readParams, List<Integer> writeParams) {
-		pair = Pair.with(readParams, writeParams);
+	public enum ParamType{
+		READ,
+		WRITE
 	}
-	
-	public int getReadParam(IntcodeMachine machine, int i, int mode) {
-		return machine.getValue(getReadParam(i), mode);
+
+	private Map<ParamType,List<Integer>> params;
+
+	public Params() {
+		params = new HashMap<>();
+		params.put(ParamType.READ, new ArrayList<>());
+		params.put(ParamType.WRITE, new ArrayList<>());
 	}
 	
 	public int getReadParam(int i) {
@@ -27,15 +29,14 @@ public class Params {
 	}
 	
 	public List<Integer> getReadParams() {
-		return pair.getValue0();
+		return params.get(ParamType.READ);
 	}
 	
 	public List<Integer> getWriteParams() {
-		return pair.getValue1();
+		return params.get(ParamType.WRITE);
 	}
-	
-	@Override
-	public String toString() {
-		return pair.toString();
+
+	public void addParam(ParamType type, int value) {
+		params.get(type).add(value);
 	}
 }

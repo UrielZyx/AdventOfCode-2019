@@ -1,23 +1,21 @@
 package intcode.operations;
 
-import java.util.List;
-
-import org.javatuples.Pair;
+import java.util.Arrays;
 
 import intcode.IntcodeMachine;
+import intcode.operations.Params.ParamType;
 
 public class LessThanOperation extends AbstractOperation{
 	
 	public LessThanOperation() {
-		setNumberOfReadParameters(2);
-		setNumberOfWriteParameters(1);
+		setParameters(Arrays.asList(ParamType.READ, ParamType.READ, ParamType.WRITE));
 	}
 	
 	@Override
-	protected void doOperation(Params params, IntcodeMachine machine, int modes) {
+	protected void doOperation(Params params, IntcodeMachine machine) {
 		
 		machine.setPositionValue(
 				params.getWriteParam(0), 
-				params.getReadParam(machine, 0, modes % 10) < params.getReadParam(machine, 1, modes / 10)? 1: 0);
+				params.getReadParam(0) < params.getReadParam(1)? 1: 0);
 	}
 }
