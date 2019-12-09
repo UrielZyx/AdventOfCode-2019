@@ -2,6 +2,7 @@ package intcode;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -22,8 +23,8 @@ public class IntcodeMachine {
 		}
 	}
 	
-	private Map<Long,Long> memory;
-	private List<Long> input;
+	private Map<Long,Long> memory = new HashMap<>();
+	private List<Long> input = new ArrayList<>();
 	private List<Long> output = new ArrayList<>();
 	int inputCounter = 0;
 	private long index = 0;
@@ -48,7 +49,6 @@ public class IntcodeMachine {
 
 	public boolean runProgram() {
 		OpCode instruction;
-		inputCounter = 0;
 				
 		while (index < memory.size()) {
 			instruction=getOpcode();
@@ -91,7 +91,7 @@ public class IntcodeMachine {
 		return getInput().get(inputCounter++);
 	}
 
-	public IntcodeMachine setInput(List<? extends Number> input) {
+	public IntcodeMachine addInput(List<? extends Number> input) {
 		this.input.addAll(toLongList(input));
 		return this;
 	}
