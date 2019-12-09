@@ -11,6 +11,12 @@ import org.javatuples.Pair;
 import intcode.IntcodeMachine;
 
 public class AmplifierRunner {
+	/***********************************************************************
+	 * AmplifierRunner was broken while working on Day 9.
+	 * I hate AmplifierRunner anyway and hope to never see it again.
+	 * As long as it doesn't appear again, I'm not fixing it. Sorry.
+	 * It worked in aa87b378b845974e534a1af7bddf24388b6fefcb
+	 ***********************************************************************/
 
     private final int[] program;
     private boolean feedbackLoopMode;

@@ -6,7 +6,13 @@ import java.util.List;
 public class Day7_1 {
 
     public static void main(String[] args) {
-        int[] program = getAmplifierControlProgram();
+    	/***********************************************************************
+    	 * AmplifierRunner was broken while working on Day 9.
+    	 * I hate AmplifierRunner anyway and hope to never see it again.
+    	 * As long as it doesn't appear again, I'm not fixing it. Sorry.
+    	 * It worked in aa87b378b845974e534a1af7bddf24388b6fefcb
+    	 ***********************************************************************/
+        int[] program = getAmplifierControlProgram(); 
         List<Integer> phaseSettings = Arrays.asList(0,1,2,3,4);
         System.out.println(new AmplifierRunner(program).maximalOutpotOfPhases(phaseSettings));
     }

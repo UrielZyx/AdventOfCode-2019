@@ -4,6 +4,12 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Day7_2 {
+	/***********************************************************************
+	 * AmplifierRunner was broken while working on Day 9.
+	 * I hate AmplifierRunner anyway and hope to never see it again.
+	 * As long as it doesn't appear again, I'm not fixing it. Sorry.
+	 * It worked in aa87b378b845974e534a1af7bddf24388b6fefcb
+	 ***********************************************************************/
 
     public static void main(String[] args) {
         int[] program = getAmplifierControlProgram();
