@@ -12,7 +12,7 @@ public class Params {
 		WRITE
 	}
 
-	private Map<ParamType,List<Integer>> params;
+	private Map<ParamType,List<Long>> params;
 
 	public Params() {
 		params = new HashMap<>();
@@ -20,23 +20,23 @@ public class Params {
 		params.put(ParamType.WRITE, new ArrayList<>());
 	}
 	
-	public int getReadParam(int i) {
+	public long getReadParam(int i) {
 		return getReadParams().get(i);
 	}
 	
-	public int getWriteParam(int i) {
+	public long getWriteParam(int i) {
 		return getWriteParams().get(i);
 	}
 	
-	public List<Integer> getReadParams() {
+	public List<Long> getReadParams() {
 		return params.get(ParamType.READ);
 	}
 	
-	public List<Integer> getWriteParams() {
+	public List<Long> getWriteParams() {
 		return params.get(ParamType.WRITE);
 	}
 
-	public void addParam(ParamType type, int value) {
+	public void addParam(ParamType type, long value) {
 		params.get(type).add(value);
 	}
 }

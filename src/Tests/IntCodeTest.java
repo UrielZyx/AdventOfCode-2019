@@ -90,7 +90,7 @@ public class IntCodeTest {
 		program.runProgram();
 
 		assertEquals(1, program.getOutput().size());
-		assertEquals(7, (int)program.getOutput().get(0));
+		assertEquals(7L, (long)program.getOutput().get(0));
 	}
 
 	@Test
@@ -101,7 +101,7 @@ public class IntCodeTest {
 		program.runProgram();
 
 		assertEquals(1, program.getOutput().size());
-		assertEquals(1, (int)program.getOutput().get(0));
+		assertEquals(1L, (long)program.getOutput().get(0));
 	}
 
 	@Test
@@ -112,7 +112,7 @@ public class IntCodeTest {
 		program.runProgram();
 
 		assertEquals(1, program.getOutput().size());
-		assertEquals(0, (int)program.getOutput().get(0));
+		assertEquals(0L, (long)program.getOutput().get(0));
 	}
 
 	@Test
@@ -123,7 +123,7 @@ public class IntCodeTest {
 		program.runProgram();
 
 		assertEquals(1, program.getOutput().size());
-		assertEquals(1, (int)program.getOutput().get(0));
+		assertEquals(1L, (long)program.getOutput().get(0));
 	}
 
 	@Test
@@ -134,7 +134,7 @@ public class IntCodeTest {
 		program.runProgram();
 
 		assertEquals(1, program.getOutput().size());
-		assertEquals(0, (int)program.getOutput().get(0));
+		assertEquals(0L, (long)program.getOutput().get(0));
 	}
 
 	@Test
@@ -145,7 +145,7 @@ public class IntCodeTest {
 		program.runProgram();
 
 		assertEquals(1, program.getOutput().size());
-		assertEquals(0, (int)program.getOutput().get(0));
+		assertEquals(0L, (long)program.getOutput().get(0));
 	}
 
 	@Test
@@ -156,7 +156,7 @@ public class IntCodeTest {
 		program.runProgram();
 
 		assertEquals(1, program.getOutput().size());
-		assertEquals(1, (int)program.getOutput().get(0));
+		assertEquals(1L, (long)program.getOutput().get(0));
 	}
 
 	@Test
@@ -167,7 +167,7 @@ public class IntCodeTest {
 		program.runProgram();
 
 		assertEquals(1, program.getOutput().size());
-		assertEquals(0, (int)program.getOutput().get(0));
+		assertEquals(0L, (long)program.getOutput().get(0));
 	}
 
 	@Test
@@ -178,7 +178,7 @@ public class IntCodeTest {
 		program.runProgram();
 
 		assertEquals(1, program.getOutput().size());
-		assertEquals(1, (int)program.getOutput().get(0));
+		assertEquals(1L, (long)program.getOutput().get(0));
 	}
 
 	@Test
@@ -189,7 +189,7 @@ public class IntCodeTest {
 		program.runProgram();
 
 		assertEquals(1, program.getOutput().size());
-		assertEquals(0, (int)program.getOutput().get(0));
+		assertEquals(0L, (long)program.getOutput().get(0));
 	}
 
 	@Test
@@ -200,7 +200,7 @@ public class IntCodeTest {
 		program.runProgram();
 
 		assertEquals(1, program.getOutput().size());
-		assertEquals(0, (int)program.getOutput().get(0));
+		assertEquals(0L, (long)program.getOutput().get(0));
 	}
 
 	@Test
@@ -211,7 +211,7 @@ public class IntCodeTest {
 		program.runProgram();
 
 		assertEquals(1, program.getOutput().size());
-		assertEquals(999, (int)program.getOutput().get(0));
+		assertEquals(999L, (long)program.getOutput().get(0));
 	}
 
 	@Test
@@ -222,7 +222,7 @@ public class IntCodeTest {
 		program.runProgram();
 
 		assertEquals(1, program.getOutput().size());
-		assertEquals(1000, (int)program.getOutput().get(0));
+		assertEquals(1000L, (long)program.getOutput().get(0));
 	}
 
 	@Test
@@ -233,6 +233,6 @@ public class IntCodeTest {
 		program.runProgram();
 
 		assertEquals(1, program.getOutput().size());
-		assertEquals(1001, (int)program.getOutput().get(0));
+		assertEquals(1001L, (long)program.getOutput().get(0));
 	}
 }

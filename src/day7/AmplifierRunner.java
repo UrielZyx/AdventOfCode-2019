@@ -78,7 +78,7 @@ public class AmplifierRunner {
         if (feedbackLoopMode) {
             isFinalValue = Boolean.logicalAnd(isFinalValue, amplifierHalted);
         }
-        return Pair.with(isFinalValue, machine.getOutput());
+        return Pair.with(isFinalValue, machine.getOutput().stream().map(l->l.intValue()));
     }
 
     private void updatePhaseForFirstTime(List<Integer> io, int i, List<Integer> phases, boolean isFinalValue) {

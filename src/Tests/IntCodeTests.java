@@ -3,6 +3,7 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -94,7 +95,7 @@ public class IntCodeTests {
 		program.runProgram();
 
 		assertEquals(1, program.getOutput().size());
-		assertEquals(7, (int)program.getOutput().get(0));
+		assertEquals(7L, (long)program.getOutput().get(0));
 	}
 	
 	//Branching
@@ -107,7 +108,7 @@ public class IntCodeTests {
 		program.runProgram();
 
 		assertEquals(1, program.getOutput().size());
-		assertEquals(1, (int)program.getOutput().get(0));
+		assertEquals(1L, (long)program.getOutput().get(0));
 	}
 
 	@Test
@@ -118,7 +119,7 @@ public class IntCodeTests {
 		program.runProgram();
 
 		assertEquals(1, program.getOutput().size());
-		assertEquals(0, (int)program.getOutput().get(0));
+		assertEquals(0L, (long)program.getOutput().get(0));
 	}
 
 	@Test
@@ -129,7 +130,7 @@ public class IntCodeTests {
 		program.runProgram();
 
 		assertEquals(1, program.getOutput().size());
-		assertEquals(1, (int)program.getOutput().get(0));
+		assertEquals(1L, (long)program.getOutput().get(0));
 	}
 
 	@Test
@@ -140,7 +141,7 @@ public class IntCodeTests {
 		program.runProgram();
 
 		assertEquals(1, program.getOutput().size());
-		assertEquals(0, (int)program.getOutput().get(0));
+		assertEquals(0L, (long)program.getOutput().get(0));
 	}
 
 	@Test
@@ -151,7 +152,7 @@ public class IntCodeTests {
 		program.runProgram();
 
 		assertEquals(1, program.getOutput().size());
-		assertEquals(0, (int)program.getOutput().get(0));
+		assertEquals(0L, (long)program.getOutput().get(0));
 	}
 
 	@Test
@@ -162,7 +163,7 @@ public class IntCodeTests {
 		program.runProgram();
 
 		assertEquals(1, program.getOutput().size());
-		assertEquals(1, (int)program.getOutput().get(0));
+		assertEquals(1L, (long)program.getOutput().get(0));
 	}
 
 	@Test
@@ -173,7 +174,7 @@ public class IntCodeTests {
 		program.runProgram();
 
 		assertEquals(1, program.getOutput().size());
-		assertEquals(0, (int)program.getOutput().get(0));
+		assertEquals(0L, (long)program.getOutput().get(0));
 	}
 
 	@Test
@@ -184,7 +185,7 @@ public class IntCodeTests {
 		program.runProgram();
 
 		assertEquals(1, program.getOutput().size());
-		assertEquals(1, (int)program.getOutput().get(0));
+		assertEquals(1L, (long)program.getOutput().get(0));
 	}
 
 	@Test
@@ -195,7 +196,7 @@ public class IntCodeTests {
 		program.runProgram();
 
 		assertEquals(1, program.getOutput().size());
-		assertEquals(0, (int)program.getOutput().get(0));
+		assertEquals(0L, (long)program.getOutput().get(0));
 	}
 
 	@Test
@@ -206,7 +207,7 @@ public class IntCodeTests {
 		program.runProgram();
 
 		assertEquals(1, program.getOutput().size());
-		assertEquals(0, (int)program.getOutput().get(0));
+		assertEquals(0L, (long)program.getOutput().get(0));
 	}
 
 	@Test
@@ -217,7 +218,7 @@ public class IntCodeTests {
 		program.runProgram();
 
 		assertEquals(1, program.getOutput().size());
-		assertEquals(999, (int)program.getOutput().get(0));
+		assertEquals(999L, (long)program.getOutput().get(0));
 	}
 
 	@Test
@@ -228,7 +229,7 @@ public class IntCodeTests {
 		program.runProgram();
 
 		assertEquals(1, program.getOutput().size());
-		assertEquals(1000, (int)program.getOutput().get(0));
+		assertEquals(1000L, (long)program.getOutput().get(0));
 	}
 
 	@Test
@@ -239,6 +240,43 @@ public class IntCodeTests {
 		program.runProgram();
 
 		assertEquals(1, program.getOutput().size());
-		assertEquals(1001, (int)program.getOutput().get(0));
+		assertEquals(1001L, (long)program.getOutput().get(0));
+	}
+	
+	//Complete machine
+
+	@Test
+	public void QuineTest() {
+		int[] memory = new int[] {109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99};
+		IntcodeMachine program = new IntcodeMachine(memory.clone());
+		
+		program.runProgram();
+
+		assertEquals(memory.length, program.getOutput().size());
+		for (int i = 0; i < memory.length; i++) {
+			assertEquals(memory[i], (long)program.getOutput().get(i));
+		}
+	}
+
+	@Test
+	public void LargeMultiplicationTest() {
+		List<Long> memory = Arrays.asList(1102L,34915192L,34915192L,7L,4L,7L,99L,0L);
+		IntcodeMachine program = new IntcodeMachine(memory);
+		
+		program.runProgram();
+
+		assertEquals(1, program.getOutput().size());
+		assertEquals(1219070632396864L, (long)program.getOutput().get(0));
+	}
+
+	@Test
+	public void LargeValuesTest() {
+		List<Long> memory = Arrays.asList(104L,1125899906842624L,99L);
+		IntcodeMachine program = new IntcodeMachine(memory);
+		
+		program.runProgram();
+
+		assertEquals(1, program.getOutput().size());
+		assertEquals(1219070632396864L, (long)program.getOutput().get(0));
 	}
 }

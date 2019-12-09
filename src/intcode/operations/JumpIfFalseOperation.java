@@ -7,7 +7,7 @@ import intcode.operations.Params.ParamType;
 
 public class JumpIfFalseOperation extends AbstractOperation{
 	
-	Integer nextInstructionCounter = null;
+	Long nextInstructionCounter = null;
 	
 	public JumpIfFalseOperation() {
 		setParameters(Arrays.asList(ParamType.READ, ParamType.READ));
@@ -24,7 +24,7 @@ public class JumpIfFalseOperation extends AbstractOperation{
 	}
 	
 	@Override
-	protected Integer getNewInstructionCounter(int i) {
+	protected long getNewInstructionCounter(long i) {
 		if (nextInstructionCounter != null) {
 			return nextInstructionCounter;
 		}

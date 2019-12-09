@@ -1,7 +1,9 @@
 package intcode;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.stream.IntStream;
 
@@ -13,28 +15,42 @@ public class IntcodeMachine {
 		POSITION (IntcodeUtil::getPositionValue),
 		IMMEDIATE (IntcodeUtil::getImmediateValue);
 		
-		public final BiFunction<IntcodeMachine, Integer, Integer> getValue;
+		public final BiFunction<IntcodeMachine, Long, Long> getValue;
 		
-		private ParametersMode(BiFunction<IntcodeMachine, Integer, Integer> getValue) {
+		private ParametersMode(BiFunction<IntcodeMachine, Long, Long> getValue) {
 			this.getValue = getValue;
 		}
 	}
 	
-	private int[] memory;
-	private List<Integer> input;
-	private List<Integer> output = new ArrayList<>();
+	private Map<Long,Long> memory;
+	private List<Long> input;
+	private List<Long> output = new ArrayList<>();
 	int inputCounter = 0;
-	private int index = 0;
+	private long index = 0;
 	
 	public IntcodeMachine(int[] memory) {
-		this.memory=memory;
+		for (int i = 0; i < memory.length; i++) {
+			this.memory.put((long)i, (long)memory[i]);
+		}
+	}
+	
+	public IntcodeMachine(Long[] memory) {
+		for (int i = 0; i < memory.length; i++) {
+			this.memory.put((long)i, memory[i]);
+		}
+	}
+	
+	public IntcodeMachine(List<Long> memory) {
+		for (int i = 0; i < memory.size(); i++) {
+			this.memory.put((long)i, memory.get(i));
+		}
 	}
 
 	public boolean runProgram() {
 		OpCode instruction;
 		inputCounter = 0;
 				
-		while (index < memory.length) {
+		while (index < memory.size()) {
 			instruction=getOpcode();
 			if (noAvailableInput(instruction)) {
 				break;
@@ -51,56 +67,66 @@ public class IntcodeMachine {
 		System.out.println(memory0());
 	}
 
-	public int memory0() {
+	public long memory0() {
 		return getImmediateValue(0);
 	}
-
-	public void printAll() {
-		IntStream.of(memory).forEach(i -> System.out.print(i+", "));
-	}
 		
-	public int getPositionValue(int i) {
-		return memory[getImmediateValue(i)];
-	}
-
-	public int getImmediateValue(int i) {
-		return memory[i];
+	public long getPositionValue(long i) {
+		return memory.get(getImmediateValue(i));
 	}
 	
-	public void setPositionValue (int i, int value) {
-		memory[getImmediateValue(i)] = value;
+	public void setPositionValue (long i, long value) {
+		memory.put(getImmediateValue(i), value);
 	}
 
-	public int getValue(int i, int mode) {
+	public long getImmediateValue(long i) {
+		return memory.get(i);
+	}
+
+	public long getValue(long i, int mode) {
 		return ParametersMode.values()[mode].getValue.apply(this, i);
 	}
 	
-	public int getNextInput() {
+	public long getNextInput() {
 		return getInput().get(inputCounter++);
 	}
 
-	public IntcodeMachine setInput(List<Integer> input) {
-		this.input = input;
+	public IntcodeMachine setInput(List<? extends Number> input) {
+		this.input.addAll(toLongList(input));
 		return this;
 	}
 	
-	public List<Integer> getInput() {
+	@SuppressWarnings("unchecked")
+	private List<Long> toLongList(List<? extends Number> list) {
+		List<Long> result = new ArrayList<>();
+		for (Number number : list) {
+			if (number instanceof Long) {
+				return (List<Long>)list;
+			}
+			if (number instanceof Integer) {
+				result.add(((Integer)number).longValue());
+			}
+		}
+		return result;
+	}
+
+	public List<Long> getInput() {
 		return input;
 	}
 
-	public Integer getOutput(int i) {
-		List<Integer> out = getOutput();
+	public Long getOutput(int i) {
+		List<Long> out = getOutput();
 		if (i > out.size()) {
 			return null;
 		}
 		return getOutput().get(i);
 	}
 	
-	public void addOutput(int value) {
+	public void addOutput(long value) {
 		getOutput().add(value);
 	}
 
-	public List<Integer> getOutput() {
+	public List<Long> getOutput() {
 		return output;
 	}
 
@@ -110,7 +136,7 @@ public class IntcodeMachine {
 	}
 
 	private OpCode getOpcode() {
-		int operation = getImmediateValue(index) % 100;
+		int operation = (int)getImmediateValue(index) % 100;
 		if (operation<=OpCode.HALT.ordinal()) {
 			return OpCode.values()[operation];
 		}

@@ -10,11 +10,11 @@ public class IntcodeUtil {
 		}
 	}
 	
-	public static int getPositionValue(IntcodeMachine machine, int i) {
+	public static long getPositionValue(IntcodeMachine machine, long i) {
 		return machine.getPositionValue(i);
 	}
 	
-	public static int getImmediateValue(IntcodeMachine machine, int i) {
+	public static long getImmediateValue(IntcodeMachine machine, long i) {
 		return machine.getImmediateValue(i);
 	}
 }
