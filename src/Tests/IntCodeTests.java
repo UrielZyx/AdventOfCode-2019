@@ -20,7 +20,7 @@ public class IntCodeTests {
 		
 		program.runProgram();
 		
-		assertEquals(2, program.getImmediateValue(0));
+		assertEquals(2, program.getMemoryAt(0));
 	}
 
 	@Test
@@ -30,7 +30,7 @@ public class IntCodeTests {
 		
 		program.runProgram();
 		
-		assertEquals(6, program.getImmediateValue(3));
+		assertEquals(6, program.getMemoryAt(3));
 	}
 
 	@Test
@@ -40,7 +40,7 @@ public class IntCodeTests {
 		
 		program.runProgram();
 		
-		assertEquals(9801, program.getImmediateValue(5));
+		assertEquals(9801, program.getMemoryAt(5));
 	}
 
 	@Test
@@ -50,8 +50,8 @@ public class IntCodeTests {
 		
 		program.runProgram();
 
-		assertEquals(3500, program.getImmediateValue(0));
-		assertEquals(70, program.getImmediateValue(3));
+		assertEquals(3500, program.getMemoryAt(0));
+		assertEquals(70, program.getMemoryAt(3));
 	}
 
 	@Test
@@ -61,8 +61,8 @@ public class IntCodeTests {
 		
 		program.runProgram();
 
-		assertEquals(30, program.getImmediateValue(0));
-		assertEquals(2, program.getImmediateValue(4));
+		assertEquals(30, program.getMemoryAt(0));
+		assertEquals(2, program.getMemoryAt(4));
 	}
 	
 	//IO and position vs. immediate
@@ -74,7 +74,7 @@ public class IntCodeTests {
 		
 		program.runProgram();
 
-		assertEquals(99, program.getImmediateValue(4));
+		assertEquals(99, program.getMemoryAt(4));
 	}
 
 	@Test
@@ -84,7 +84,7 @@ public class IntCodeTests {
 		
 		program.runProgram();
 
-		assertEquals(99, program.getImmediateValue(4));
+		assertEquals(99, program.getMemoryAt(4));
 	}
 
 	@Test
@@ -282,7 +282,7 @@ public class IntCodeTests {
 
 	@Test
 	public void relativeInputTest() {
-		int[] memory = new int[] {109,1,203,0,104,0,104,1};
+		int[] memory = new int[] {109,1,203,0,4,0,4,1};
 		IntcodeMachine program = new IntcodeMachine(memory).addInput(Arrays.asList(5));
 		
 		program.runProgram();

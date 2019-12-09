@@ -157,9 +157,10 @@ public abstract class AbstractOperation implements BiFunction<IntcodeMachine, Lo
 
 		for (ParamType type : requiredParams) {
 			value = i + ++j;
+			value = machine.getPositionByMode(value, modes % 10);
+			modes /= 10;
 			if (type.equals(ParamType.READ)) {
-				value = machine.getValue(value, modes % 10);
-				modes /= 10;
+				value = machine.getMemoryAt(value);
 			}
 			params.addParam(type, value);
 		}
@@ -168,18 +169,14 @@ public abstract class AbstractOperation implements BiFunction<IntcodeMachine, Lo
 	}
 
 	protected long immediateValue(int i, IntcodeMachine machine) {
-		return machine.getImmediateValue(i);
+		return machine.getImmediateModePosition(i);
 	}
 
 	protected long positionValue(int i, IntcodeMachine machine) {
-		return machine.getPositionValue(i);
-	}
-
-	protected long getValue(IntcodeMachine machine, int i, int mode) {
-		return machine.getValue(i, mode);
+		return machine.getPositionModePosition(i);
 	}
 
 	private int getParamsModes(IntcodeMachine machine, long i) {
-		return (int)machine.getImmediateValue(i) / 100;
+		return (int)machine.getMemoryAt(i) / 100;
 	}
 }

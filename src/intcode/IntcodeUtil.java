@@ -10,15 +10,15 @@ public class IntcodeUtil {
 		}
 	}
 	
-	public static long getPositionValue(IntcodeMachine machine, long i) {
-		return machine.getPositionValue(i);
+	public static long getPositionModePosition(IntcodeMachine machine, long i) {
+		return machine.getPositionModePosition(i);
 	}
 	
-	public static long getImmediateValue(IntcodeMachine machine, long i) {
-		return machine.getImmediateValue(i);
+	public static long getImmediateModePosition(IntcodeMachine machine, long i) {
+		return machine.getImmediateModePosition(i);
 	}
 	
-	public static long getRelativeValue(IntcodeMachine machine, long i) {
-		return machine.getRelativeValue(i);
+	public static long getRelativeModePosition(IntcodeMachine machine, long i) {
+		return machine.getRelativeModePosition(i);
 	}
 }

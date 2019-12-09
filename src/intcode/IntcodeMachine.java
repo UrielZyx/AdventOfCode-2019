@@ -13,9 +13,9 @@ import intcode.operations.AbstractOperation.OpCode;
 public class IntcodeMachine {
 	
 	public enum ParametersMode {
-		POSITION (IntcodeUtil::getPositionValue),
-		IMMEDIATE (IntcodeUtil::getImmediateValue),
-		RELATIVE (IntcodeUtil::getRelativeValue);
+		POSITION (IntcodeUtil::getPositionModePosition),
+		IMMEDIATE (IntcodeUtil::getImmediateModePosition),
+		RELATIVE (IntcodeUtil::getRelativeModePosition);
 		
 		public final BiFunction<IntcodeMachine, Long, Long> getValue;
 		
@@ -70,30 +70,34 @@ public class IntcodeMachine {
 	}
 
 	public long memory0() {
-		return getImmediateValue(0);
+		return getMemoryAt(0);
 	}
 
-	public long getRelativeValue(long i) {
-		return getImmediateValue(relativeBase + getImmediateValue(i));
+	public long getRelativeModePosition(long i) {
+		return getImmediateModePosition(relativeBase + getMemoryAt(i));
 	}
 
 	public void adjustRelativeBase(long i) {
 		relativeBase += i;
 	}
 		
-	public long getPositionValue(long i) {
-		return memory.getOrDefault(getImmediateValue(i),0L);
+	public long getPositionModePosition(long i) {
+		return getMemoryAt(getImmediateModePosition(i));
 	}
 	
 	public void setPositionValue (long i, long value) {
-		memory.put(getImmediateValue(i), value);
+		memory.put(getImmediateModePosition(i), value);
 	}
 
-	public long getImmediateValue(long i) {
-		return memory.get(i);
+	public long getImmediateModePosition(long i) {
+		return i;
 	}
 
-	public long getValue(long i, int mode) {
+	public long getMemoryAt(long i) {
+		return memory.getOrDefault(i, 0L);
+	}
+
+	public long getPositionByMode(long i, int mode) {
 		return ParametersMode.values()[mode].getValue.apply(this, i);
 	}
 	
@@ -146,7 +150,7 @@ public class IntcodeMachine {
 	}
 
 	private OpCode getOpcode() {
-		int operation = (int)getImmediateValue(index) % 100;
+		int operation = (int)getMemoryAt(index) % 100;
 		if (operation<=OpCode.HALT.ordinal()) {
 			return OpCode.values()[operation];
 		}
