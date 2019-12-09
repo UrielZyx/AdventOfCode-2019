@@ -21,7 +21,7 @@ public abstract class AbstractOperation implements BiFunction<IntcodeMachine, Lo
 		JEZ(new JumpIfFalseOperation()),
 		LESS_THAN(new LessThanOperation()),
 		EQUALS(new EqualsOperation()),
-		TEMP9((m,i)->-1L),
+		CHANGE_BASE(new AdjustRelativeBaseOperation()),
 		TEMP10((m,i)->-1L),
 		TEMP11((m,i)->-1L),
 		TEMP12((m,i)->-1L),
@@ -151,11 +151,11 @@ public abstract class AbstractOperation implements BiFunction<IntcodeMachine, Lo
 		requiredParameters = params;
 	}
 
-	protected static Params getParams(IntcodeMachine machine, long i, List<ParamType> requiresParams, int modes) {
+	protected static Params getParams(IntcodeMachine machine, long i, List<ParamType> requiredParams, int modes) {
 		Params params = new Params();
 		long j = 0, value;
 
-		for (ParamType type : requiresParams) {
+		for (ParamType type : requiredParams) {
 			value = i + ++j;
 			if (type.equals(ParamType.READ)) {
 				value = machine.getValue(value, modes % 10);

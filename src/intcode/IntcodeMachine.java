@@ -14,7 +14,8 @@ public class IntcodeMachine {
 	
 	public enum ParametersMode {
 		POSITION (IntcodeUtil::getPositionValue),
-		IMMEDIATE (IntcodeUtil::getImmediateValue);
+		IMMEDIATE (IntcodeUtil::getImmediateValue),
+		RELATIVE (IntcodeUtil::getRelativeValue);
 		
 		public final BiFunction<IntcodeMachine, Long, Long> getValue;
 		
@@ -26,6 +27,7 @@ public class IntcodeMachine {
 	private Map<Long,Long> memory = new HashMap<>();
 	private List<Long> input = new ArrayList<>();
 	private List<Long> output = new ArrayList<>();
+	long relativeBase = 0;
 	int inputCounter = 0;
 	private long index = 0;
 	
@@ -50,7 +52,7 @@ public class IntcodeMachine {
 	public boolean runProgram() {
 		OpCode instruction;
 				
-		while (index < memory.size()) {
+		while (true) {
 			instruction=getOpcode();
 			if (noAvailableInput(instruction)) {
 				break;
@@ -70,9 +72,17 @@ public class IntcodeMachine {
 	public long memory0() {
 		return getImmediateValue(0);
 	}
+
+	public long getRelativeValue(long i) {
+		return getImmediateValue(relativeBase + getImmediateValue(i));
+	}
+
+	public void adjustRelativeBase(long i) {
+		relativeBase += i;
+	}
 		
 	public long getPositionValue(long i) {
-		return memory.get(getImmediateValue(i));
+		return memory.getOrDefault(getImmediateValue(i),0L);
 	}
 	
 	public void setPositionValue (long i, long value) {

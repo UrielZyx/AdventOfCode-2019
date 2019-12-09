@@ -17,4 +17,8 @@ public class IntcodeUtil {
 	public static long getImmediateValue(IntcodeMachine machine, long i) {
 		return machine.getImmediateValue(i);
 	}
+	
+	public static long getRelativeValue(IntcodeMachine machine, long i) {
+		return machine.getRelativeValue(i);
+	}
 }
