@@ -101,7 +101,7 @@ public class IntCodeTests {
 	//Branching
 
 	@Test
-	public void EqualsReturnsTrueWhenImmediateEqualsTest() {
+	public void equalsReturnsTrueWhenImmediateEqualsTest() {
 		int[] memory = new int[] {3,3,1108,-1,8,3,4,3,99};
 		IntcodeMachine program = new IntcodeMachine(memory).addInput(Arrays.asList(8));
 		
@@ -112,7 +112,7 @@ public class IntCodeTests {
 	}
 
 	@Test
-	public void EqualsReturnsFalseWhenImmediateNotEqualsTest() {
+	public void equalsReturnsFalseWhenImmediateNotEqualsTest() {
 		int[] memory = new int[] {3,3,1108,-1,8,3,4,3,99};
 		IntcodeMachine program = new IntcodeMachine(memory).addInput(Arrays.asList(7));
 		
@@ -123,7 +123,7 @@ public class IntCodeTests {
 	}
 
 	@Test
-	public void LessThanReturnsTrueWhenImmediateLessThanTest() {
+	public void lessThanReturnsTrueWhenImmediateLessThanTest() {
 		int[] memory = new int[] {3,3,1107,-1,8,3,4,3,99};
 		IntcodeMachine program = new IntcodeMachine(memory).addInput(Arrays.asList(7));
 		
@@ -134,7 +134,7 @@ public class IntCodeTests {
 	}
 
 	@Test
-	public void LessThanReturnsFalseWhenImmediateEqualsTest() {
+	public void lessThanReturnsFalseWhenImmediateEqualsTest() {
 		int[] memory = new int[] {3,3,1107,-1,8,3,4,3,99};
 		IntcodeMachine program = new IntcodeMachine(memory).addInput(Arrays.asList(8));
 		
@@ -145,7 +145,7 @@ public class IntCodeTests {
 	}
 
 	@Test
-	public void LessThanReturnsFalseWhenImmediateGreaterTest() {
+	public void lessThanReturnsFalseWhenImmediateGreaterTest() {
 		int[] memory = new int[] {3,3,1107,-1,8,3,4,3,99};
 		IntcodeMachine program = new IntcodeMachine(memory).addInput(Arrays.asList(9));
 		
@@ -156,7 +156,7 @@ public class IntCodeTests {
 	}
 
 	@Test
-	public void EqualsReturnsTrueWhenPositionEqualsTest() {
+	public void equalsReturnsTrueWhenPositionEqualsTest() {
 		int[] memory = new int[] {3,9,8,9,10,9,4,9,99,-1,8};
 		IntcodeMachine program = new IntcodeMachine(memory).addInput(Arrays.asList(8));
 		
@@ -167,7 +167,7 @@ public class IntCodeTests {
 	}
 
 	@Test
-	public void EqualsReturnsFalseWhenPositionNotEqualsTest() {
+	public void equalsReturnsFalseWhenPositionNotEqualsTest() {
 		int[] memory = new int[] {3,9,8,9,10,9,4,9,99,-1,8};
 		IntcodeMachine program = new IntcodeMachine(memory).addInput(Arrays.asList(7));
 		
@@ -178,7 +178,7 @@ public class IntCodeTests {
 	}
 
 	@Test
-	public void LessThanReturnsTrueWhenPositionLessThanTest() {
+	public void lessThanReturnsTrueWhenPositionLessThanTest() {
 		int[] memory = new int[] {3,9,7,9,10,9,4,9,99,-1,8};
 		IntcodeMachine program = new IntcodeMachine(memory).addInput(Arrays.asList(7));
 		
@@ -189,7 +189,7 @@ public class IntCodeTests {
 	}
 
 	@Test
-	public void LessThanReturnsFalseWhenPositionEqualsTest() {
+	public void lessThanReturnsFalseWhenPositionEqualsTest() {
 		int[] memory = new int[] {3,9,7,9,10,9,4,9,99,-1,8};
 		IntcodeMachine program = new IntcodeMachine(memory).addInput(Arrays.asList(8));
 		
@@ -200,7 +200,7 @@ public class IntCodeTests {
 	}
 
 	@Test
-	public void LessThanReturnsFalseWhenPositionGreaterTest() {
+	public void lessThanReturnsFalseWhenPositionGreaterTest() {
 		int[] memory = new int[] {3,9,7,9,10,9,4,9,99,-1,8};
 		IntcodeMachine program = new IntcodeMachine(memory).addInput(Arrays.asList(9));
 		
@@ -211,7 +211,7 @@ public class IntCodeTests {
 	}
 
 	@Test
-	public void RecognizesLessThanTest() {
+	public void recognizesLessThanTest() {
 		int[] memory = new int[] {3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99};
 		IntcodeMachine program = new IntcodeMachine(memory).addInput(Arrays.asList(7));
 		
@@ -222,7 +222,7 @@ public class IntCodeTests {
 	}
 
 	@Test
-	public void RecognizesEqualsTest() {
+	public void recognizesEqualsTest() {
 		int[] memory = new int[] {3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99};
 		IntcodeMachine program = new IntcodeMachine(memory).addInput(Arrays.asList(8));
 		
@@ -233,7 +233,7 @@ public class IntCodeTests {
 	}
 
 	@Test
-	public void RecognizesGreaterThanTest() {
+	public void recognizesGreaterThanTest() {
 		int[] memory = new int[] {3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99};
 		IntcodeMachine program = new IntcodeMachine(memory).addInput(Arrays.asList(9));
 		
@@ -246,7 +246,7 @@ public class IntCodeTests {
 	//Complete machine
 
 	@Test
-	public void QuineTest() {
+	public void quineTest() {
 		int[] memory = new int[] {109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99};
 		IntcodeMachine program = new IntcodeMachine(memory.clone());
 		
@@ -259,7 +259,7 @@ public class IntCodeTests {
 	}
 
 	@Test
-	public void LargeMultiplicationTest() {
+	public void largeMultiplicationTest() {
 		List<Long> memory = Arrays.asList(1102L,34915192L,34915192L,7L,4L,7L,99L,0L);
 		IntcodeMachine program = new IntcodeMachine(memory);
 		
@@ -270,7 +270,7 @@ public class IntCodeTests {
 	}
 
 	@Test
-	public void LargeValuesTest() {
+	public void largeValuesTest() {
 		List<Long> memory = Arrays.asList(104L,1125899906842624L,99L);
 		IntcodeMachine program = new IntcodeMachine(memory);
 		
@@ -278,5 +278,17 @@ public class IntCodeTests {
 
 		assertEquals(1, program.getOutput().size());
 		assertEquals(1125899906842624L, (long)program.getOutput().get(0));
+	}
+
+	@Test
+	public void relativeInputTest() {
+		int[] memory = new int[] {109,1,203,0,104,0,104,1};
+		IntcodeMachine program = new IntcodeMachine(memory).addInput(Arrays.asList(5));
+		
+		program.runProgram();
+
+		assertEquals(2, program.getOutput().size());
+		assertEquals(109, (long)program.getOutput().get(0));
+		assertEquals(5, (long)program.getOutput().get(1));
 	}
 }
