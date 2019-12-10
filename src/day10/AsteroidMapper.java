@@ -139,7 +139,7 @@ public class AsteroidMapper {
 			return 1;
 		}
 		if (d1.equals(Pair.with(1, 0)) || d2.equals(Pair.with(1, 0))) {
-			return d2.getValue0() - d1.getValue0();
+			return d2.getValue1() - d1.getValue1();
 		}
 		return 0;
 	}
