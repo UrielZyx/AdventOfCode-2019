@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+import elvenImageFormat.Image;
+
 public class Day8_2 {
 	
 	private final static int WIDTH = 25;

@@ -1,4 +1,4 @@
-package day8;
+package elvenImageFormat;
 
 public class Image {
 

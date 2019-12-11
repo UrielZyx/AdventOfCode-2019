@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Assert;
 import org.junit.Test;
 
-import day8.Image;
+import elvenImageFormat.Image;
 
 public class ImageTest {
 

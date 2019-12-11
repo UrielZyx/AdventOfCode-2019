@@ -1,12 +1,16 @@
 package intcode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import intcode.operations.AbstractOperation.OpCode;
 
@@ -25,10 +29,11 @@ public class IntcodeMachine {
 	}
 	
 	private Map<Long,Long> memory = new HashMap<>();
-	private List<Long> input = new ArrayList<>();
+	private Iterable<Long> input = new ArrayList<>();
 	private List<Long> output = new ArrayList<>();
 	long relativeBase = 0;
-	int inputCounter = 0;
+	Iterator<Long> inputIterator = input.iterator();
+	private Consumer<Long> outputHandler = System.out::println;
 	private long index = 0;
 	
 	public IntcodeMachine(int[] memory) {
@@ -46,6 +51,13 @@ public class IntcodeMachine {
 	public IntcodeMachine(List<Long> memory) {
 		for (int i = 0; i < memory.size(); i++) {
 			this.memory.put((long)i, memory.get(i));
+		}
+	}
+
+	public IntcodeMachine(String memory) {
+		String[] memoryCells = memory.split(",");
+		for (int i = 0; i < memoryCells.length; i++) {
+			this.memory.put((long)i, Long.parseLong(memoryCells[i]));
 		}
 	}
 
@@ -102,11 +114,18 @@ public class IntcodeMachine {
 	}
 	
 	public long getNextInput() {
-		return getInput().get(inputCounter++);
+		return inputIterator.next();
 	}
-
-	public IntcodeMachine addInput(List<? extends Number> input) {
-		this.input.addAll(toLongList(input));
+	
+	@Deprecated
+	public IntcodeMachine replaceInput(List<? extends Number> newInput) {
+		this.input = toLongList(newInput);
+		inputIterator = this.input.iterator();
+		return this;
+	}
+	
+	public IntcodeMachine setInputIterator(Iterator<Long> newInput) {
+		this.inputIterator = newInput;
 		return this;
 	}
 	
@@ -124,8 +143,18 @@ public class IntcodeMachine {
 		return result;
 	}
 
-	public List<Long> getInput() {
+	public Iterable<Long> getInput() {
 		return input;
+	}
+	
+	public void addOutput(long value) {
+		getOutput().add(value);
+		outputHandler.accept(value);
+	}
+
+	public IntcodeMachine setOutputHandler(Consumer<Long> handler) {
+		this.outputHandler = handler;
+		return this;
 	}
 
 	public Long getOutput(int i) {
@@ -134,10 +163,6 @@ public class IntcodeMachine {
 			return null;
 		}
 		return getOutput().get(i);
-	}
-	
-	public void addOutput(long value) {
-		getOutput().add(value);
 	}
 
 	public List<Long> getOutput() {
@@ -158,6 +183,6 @@ public class IntcodeMachine {
 	}
 
 	private boolean noAvailableInput(OpCode instruction) {
-		return instruction.equals(OpCode.INPUT) && inputCounter >= input.size();
+		return instruction.equals(OpCode.INPUT) && !inputIterator.hasNext();
 	}
 }
