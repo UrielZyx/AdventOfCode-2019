@@ -12,7 +12,7 @@ public class Day8_2 {
 	private final static int WIDTH = 25;
 	private final static int HEIGHT = 6;
 	private final static String BLACK_CHAR = " ";
-	private final static String WHITE_CHAR = ":";
+	private final static String WHITE_CHAR = "#";
 	
 	public static void main(String[] args) {
 		
