@@ -111,11 +111,7 @@ public class AsteroidMapper {
 		if (t != 0) {
 			return t;
 		}
-		t = differentQuadrants(d1, d2);
-		if (t != 0) {
-			return t;
-		}
-		return sameQuadrant(d1, d2);
+		return sameHalf(d1, d2);
 	}
 
 	private static int differentHalfs(Pair<Integer, Integer> d1, Pair<Integer, Integer> d2) {
@@ -134,27 +130,13 @@ public class AsteroidMapper {
 		return 0;
 	}
 
-	private static int differentQuadrants(Pair<Integer, Integer> d1, Pair<Integer, Integer> d2) {
-		int t1 = d1.getValue0() * d1.getValue1(), t2 = d2.getValue0() * d2.getValue1();
-		if ((t1 < 0 && t2 > 0) || (t1 > 0 && t2 < 0)) {
-			return t1;
-		}
-		if (d1.equals(Pair.with(0, 1)) || d2.equals(Pair.with(0, 1))) {
-			return d1.getValue0() - d2.getValue0();
-		}
-		if (d1.equals(Pair.with(0, -1)) || d2.equals(Pair.with(0, -1))) {
-			return d2.getValue0() - d1.getValue0();
-		}
-		return 0;
-	}
-
-	private static int sameQuadrant(Pair<Integer, Integer> d1, Pair<Integer, Integer> d2) {
+	private static int sameHalf(Pair<Integer, Integer> d1, Pair<Integer, Integer> d2) {
 		float f1 = ratio(d1), f2 = ratio(d2);
 		int result = d1.getValue0() * d1.getValue1();
-		return f1 > f2? result: -1 * result;
+		return f1 > f2? -1: 1;
 	}
 	
 	private static float ratio(Pair<Integer, Integer> d) {
-		return ((float)Math.abs(d.getValue0()))/((float)Math.abs(d.getValue1()));
+		return ((float)-1 * d.getValue0())/((float)d.getValue1());
 	}
 }
