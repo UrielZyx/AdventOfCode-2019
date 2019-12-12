@@ -6,9 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.stream.Collectors;
-import java.util.HashSet;
 
 import org.javatuples.Pair;
+
+import myMath.MyMath;
 
 public class AsteroidMapper {
 
@@ -102,18 +103,7 @@ public class AsteroidMapper {
 	}
 
 	private int findGCD(int x, int y) {
-		int t;
-		while(true) {
-			if (x < y) {
-				t=x;
-				x=y;
-				y=t;
-			}
-			if(x % y == 0) {
-				return y;
-			}
-			x-=y*(x/y);
-		}
+		return (int) MyMath.gcd(x, y);
 	}
 	
 	private static int compareDirections(Pair<Integer, Integer> d1, Pair<Integer, Integer> d2) {
