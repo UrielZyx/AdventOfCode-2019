@@ -30,6 +30,7 @@ public class RepairDroid {
 	IntcodeMachine machine;
 	Map<Pair<Integer, Integer>, Long> room = new HashMap<>();
 	Stack<Pair<Integer, Integer>> path = new Stack<>();
+	Pair<Integer, Integer> oxygenSystemLocation;
 	int shortestPathLength = Integer.MAX_VALUE, maxX=0, maxY=0, minX=0, minY=0;
 	boolean backtracing = false;
 	Direction currentDirection = Direction.NORTH;
@@ -60,7 +61,7 @@ public class RepairDroid {
 		return shortestPathLength;
 	}
 
-	private void printGrid() {
+	public void printGrid() {
 		System.out.println("x range: " + minX + "," + maxX + "\ty range: " + minY + "," + maxY);
 		for (int i = maxY; i >= minY; i--) {
 			for (int j = minX; j <= maxX; j++) {
@@ -76,7 +77,7 @@ public class RepairDroid {
 	}
 
 	private void outputHandler(Long output) {
-		System.out.println("Location: " + path.peek().getValue0() + "," + path.peek().getValue1() + "\tdirection: " + currentDirection.toString() + "\tOutput: " + output);
+		// System.out.println("Location: " + path.peek().getValue0() + "," + path.peek().getValue1() + "\tdirection: " + currentDirection.toString() + "\tOutput: " + output);
 		if (!backtracing) {
 			handleNewOutput(output);
 		}
@@ -107,6 +108,7 @@ public class RepairDroid {
 		}
 		if (output == 2 && path.size() <= shortestPathLength) {
 			shortestPathLength = path.size() - 1;
+			oxygenSystemLocation = nextLocation;
 		}
 	}
 
@@ -150,8 +152,29 @@ public class RepairDroid {
 	}
 
 	public int timeForOxygen() {
-		// TODO Auto-generated method stub
-		return 0;
+		path = new Stack<>();
+		path.push(oxygenSystemLocation);
+		room.put(oxygenSystemLocation, -1L);
+		return timeForOxygenRecursive();
+	}
+
+	private int timeForOxygenRecursive() {
+		return Arrays.stream(Direction.values())
+			.map(this::incrementedLocation)
+			.mapToInt(this::timeForOxygenRecursive)
+			.max()
+			.orElse(0);
+	}
+
+	private int timeForOxygenRecursive(Pair<Integer, Integer> nextLocation){
+		if (room.get(nextLocation) <= 0) {
+			return path.size() - 1;
+		}
+		path.add(nextLocation);
+		room.put(nextLocation, -1L);
+		int temp = timeForOxygenRecursive();
+		path.pop();
+		return temp;
 	}
 
 }
