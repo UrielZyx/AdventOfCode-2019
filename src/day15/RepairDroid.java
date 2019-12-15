@@ -125,25 +125,6 @@ public class RepairDroid {
 		}
 	}
 
-	private void incrementDirection() {
-		switch (currentDirection) {
-		case NORTH:
-			currentDirection = Direction.SOUTH;
-			break;
-		case SOUTH:
-			currentDirection = Direction.EAST;
-			break;
-		case EAST:
-			currentDirection = Direction.WEST;
-			break;
-		case WEST:
-			currentDirection = Direction.NORTH;
-			break;
-		default:
-			currentDirection = null;
-		}
-	}
-
 	private Pair<Integer, Integer> incrementedLocation(Direction direction) {
 		return incrementedLocation(path.peek(), direction);
 	}
