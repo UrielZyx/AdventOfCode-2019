@@ -1,22 +1,16 @@
 package day7;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.javatuples.Pair;
 
 import intcode.IntcodeMachine;
 
 public class AmplifierRunner {
-	/***********************************************************************
-	 * AmplifierRunner was broken while working on Day 9.
-	 * I hate AmplifierRunner anyway and hope to never see it again.
-	 * As long as it doesn't appear again, I'm not fixing it. Sorry.
-	 * It worked in aa87b378b845974e534a1af7bddf24388b6fefcb
-	 ***********************************************************************/
 
     private final int[] program;
     private boolean feedbackLoopMode;
@@ -84,7 +78,10 @@ public class AmplifierRunner {
         if (feedbackLoopMode) {
             isFinalValue = Boolean.logicalAnd(isFinalValue, amplifierHalted);
         }
-        return Pair.with(isFinalValue, machine.getOutput().stream().map(l->l.intValue()));
+        return Pair.with(isFinalValue, 
+            machine.getOutput().stream()
+                .map(l->l.intValue())
+                .collect(Collectors.toList()));
     }
 
     private void updatePhaseForFirstTime(List<Integer> io, int i, List<Integer> phases, boolean isFinalValue) {
