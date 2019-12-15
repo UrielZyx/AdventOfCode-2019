@@ -31,6 +31,7 @@ public class RepairDroid {
 	Map<Pair<Integer, Integer>, Long> room = new HashMap<>();
 	Stack<Pair<Integer, Integer>> path = new Stack<>();
 	int shortestPathLength = Integer.MAX_VALUE, maxX=0, maxY=0, minX=0, minY=0;
+	boolean backtracing = false;
 	Direction currentDirection = Direction.NORTH;
 	private Iterator<Long> directionIterator = new Iterator<Long>() {
 		
@@ -63,8 +64,12 @@ public class RepairDroid {
 		System.out.println("x range: " + minX + "," + maxX + "\ty range: " + minY + "," + maxY);
 		for (int i = maxY; i >= minY; i--) {
 			for (int j = minX; j <= maxX; j++) {
-				long t = room.getOrDefault(Pair.with(j, i), 1L);
-				System.out.print(t==0?"#":t==1?" ":"@");
+				if (j == 0 && i == 0) {
+					System.out.print("*");
+				} else {
+					long t = room.getOrDefault(Pair.with(j, i), -1L);
+					System.out.print(t==0?"#":t==1?".":t==-1?" ":"@");	
+				}
 			}
 			System.out.println();
 		}		
@@ -72,16 +77,10 @@ public class RepairDroid {
 
 	private void outputHandler(Long output) {
 		System.out.println("Location: " + path.peek().getValue0() + "," + path.peek().getValue1() + "\tdirection: " + currentDirection.toString() + "\tOutput: " + output);
-		printGrid();
-		room.put(incrementedLocation(currentDirection), output);
-		updateBorders(incrementedLocation(currentDirection));
-		if (output != 0) {
-			path.add(incrementedLocation(currentDirection));
+		if (!backtracing) {
+			handleNewOutput(output);
 		}
-		if (output == 2 && path.size() <= shortestPathLength) {
-			shortestPathLength = path.size() - 1;
-		}
-		
+		backtracing = false;
 		boolean canMove = false;
 		for (Direction direction : Direction.values()) {
 			if (!room.containsKey(incrementedLocation(direction))) {
@@ -90,12 +89,24 @@ public class RepairDroid {
 				break;
 			}
 		}
+		
 		if (!canMove) {
 			backTrace();
-			incrementDirection();
 			if (path.isEmpty()) {
 				currentDirection = null;
 			}
+		}
+	}
+
+	private void handleNewOutput(Long output) {
+		Pair<Integer, Integer> nextLocation = incrementedLocation(currentDirection);
+		room.put(nextLocation, output);
+		updateBorders(nextLocation);
+		if (output != 0) {
+			path.add(nextLocation);
+		}
+		if (output == 2 && path.size() <= shortestPathLength) {
+			shortestPathLength = path.size() - 1;
 		}
 	}
 
@@ -142,6 +153,7 @@ public class RepairDroid {
 	}
 
 	private void backTrace() {
+		backtracing = true;
 		Pair<Integer, Integer> currLocation = path.pop();
 		if (path.isEmpty()) {
 			return;
