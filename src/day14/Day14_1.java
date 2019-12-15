@@ -20,6 +20,7 @@ public class Day14_1 {
                     NanoFactory factory = new NanoFactory(reader.lines().collect(Collectors.toList()));
                     System.out.println(factory.numberOfOresNeededForFuel(1L));
                     // This is cheating (did a binary search):
+                    // These tests are super time-consuming
                     System.out.println(factory.numberOfOresNeededForFuel(4436981L));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
