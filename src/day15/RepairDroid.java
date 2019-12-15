@@ -149,4 +149,9 @@ public class RepairDroid {
 					}});
 	}
 
+	public int timeForOxygen() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }
