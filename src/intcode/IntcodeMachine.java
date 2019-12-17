@@ -117,7 +117,6 @@ public class IntcodeMachine {
 		return inputIterator.next();
 	}
 	
-	@Deprecated
 	public IntcodeMachine replaceInput(List<? extends Number> newInput) {
 		this.input = toLongList(newInput);
 		inputIterator = this.input.iterator();

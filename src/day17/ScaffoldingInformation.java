@@ -1,7 +1,9 @@
 package day17;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import intcode.IntcodeMachine;
 
@@ -13,12 +15,13 @@ public class ScaffoldingInformation {
 	char[][] grid;
 	
 	public ScaffoldingInformation(String program) {
-		machine = new IntcodeMachine(program)
-				.setOutputHandler(this::outputHandler);
+		machine = new IntcodeMachine(program);
 	}
 
 	public int checkIntersections() {
-		machine.runProgram();
+		machine
+			.setOutputHandler(this::outputHandler)
+			.runProgram();
 		int lineLength = programOutput.indexOf((char)10) + 1;
 		grid = new char[programOutput.size() / lineLength][lineLength];
 		for (int i = 0; i < grid.length; i++) {
@@ -42,5 +45,19 @@ public class ScaffoldingInformation {
 	
 	private void outputHandler(Long output) {
 		programOutput.add((char)output.intValue());
+	}
+	
+
+	public long notifyRobots(String inputs) {
+		List<Integer> in = new ArrayList<>();
+		List<Long> out;
+		for (int i = 0; i < inputs.length(); i++) {
+			in.add((int)inputs.charAt(i));
+		}
+		machine
+			.replaceInput(in)
+			.runProgram();
+		out = machine.getOutput();
+		return out.get(out.size() - 1);
 	}
 }
