@@ -55,16 +55,20 @@ public class TunnelNavigator {
                     y = j + direction.getValue1();
                     if (hasValues(i, j, x, y)) {
                         doors = checkBlockers(i, j, x, y);
-                        distances.getOrDefault(Pair.with(i, j), new HashMap<>())
+                        distances.put(Pair.with(i, j), distances.getOrDefault(Pair.with(i, j), new HashMap<>()));
+                        distances.get(Pair.with(i, j))
                     		.put(Pair.with(x, y), 1);
-                        distances.getOrDefault(Pair.with(x, y), new HashMap<>())
+                        distances.put(Pair.with(x, y), distances.getOrDefault(Pair.with(x, y), new HashMap<>()));
+                        distances.get(Pair.with(x, y))
                     		.put(Pair.with(i, j), 1);
+                        // TODO Same thing
                         blockers.getOrDefault(Pair.with(i, j), new HashMap<>())
                     		.put(Pair.with(x, y), new Blockers().add(doors));
                         blockers.getOrDefault(Pair.with(x, y), new HashMap<>())
                     		.put(Pair.with(i, j), new Blockers().add(doors));
                     }
                 }
+                // TODO Same thing
                 distances.getOrDefault(Pair.with(i, j), new HashMap<>())
                 	.put(Pair.with(i, j), 0);
             }
