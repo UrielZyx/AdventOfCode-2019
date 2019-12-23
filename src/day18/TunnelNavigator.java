@@ -2,8 +2,11 @@ package day18;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.javatuples.Pair;
 
@@ -25,7 +28,9 @@ public class TunnelNavigator {
                 temp = input.get(i).charAt(j);
                 if (temp != '#') {
 					grid.put(Pair.with(i,  j), temp);
-	                specialLocations.put(temp, Pair.with(i, j));
+	                if (Character.isLowerCase(temp) || temp == '@') {
+		                specialLocations.put(temp, Pair.with(i, j));
+					}
 				}
             }
         }
@@ -35,6 +40,8 @@ public class TunnelNavigator {
 	public int getShortestPathToAllKeys() {
         initPaths();
         floydWarshall();
+//        printDistances();
+        System.out.println("Done with Floyd-Warshal");
 		return getShortestPath();
 	}
 
@@ -61,16 +68,22 @@ public class TunnelNavigator {
                         distances.put(Pair.with(x, y), distances.getOrDefault(Pair.with(x, y), new HashMap<>()));
                         distances.get(Pair.with(x, y))
                     		.put(Pair.with(i, j), 1);
-                        // TODO Same thing
-                        blockers.getOrDefault(Pair.with(i, j), new HashMap<>())
+                        blockers.put(Pair.with(i, j), blockers.getOrDefault(Pair.with(i, j), new HashMap<>()));
+                        blockers.get(Pair.with(i, j))
                     		.put(Pair.with(x, y), new Blockers().add(doors));
-                        blockers.getOrDefault(Pair.with(x, y), new HashMap<>())
+                        blockers.put(Pair.with(x, y), blockers.getOrDefault(Pair.with(x, y), new HashMap<>()));
+                        blockers.get(Pair.with(x, y))
                     		.put(Pair.with(i, j), new Blockers().add(doors));
                     }
                 }
-                // TODO Same thing
-                distances.getOrDefault(Pair.with(i, j), new HashMap<>())
-                	.put(Pair.with(i, j), 0);
+                if(grid.containsKey(Pair.with(i, j))) {
+                    distances.put(Pair.with(i, j), distances.getOrDefault(Pair.with(i, j), new HashMap<>()));
+                    distances.get(Pair.with(i, j))
+                		.put(Pair.with(i, j), 0);
+                    blockers.put(Pair.with(i, j), blockers.getOrDefault(Pair.with(i, j), new HashMap<>()));
+                    blockers.get(Pair.with(i, j))
+                		.put(Pair.with(i, j), new Blockers());
+                }
             }
         }
     }
@@ -81,10 +94,10 @@ public class TunnelNavigator {
 
     private Blockers checkBlockers(int i, int j, int x, int y) {
         Blockers doors = new Blockers();
-        if (grid(i, j) >= 'A' && grid(i, j) <= 'Z') {
+        if (Character.isUpperCase(grid(i, j))) {
             doors.add(grid(i, j));
         }
-        if (grid(x, y) >= 'A' && grid(x, y) <= 'Z') {
+        if (Character.isUpperCase(grid(x, y))) {
             doors.add(grid(x, y));
         }
         return doors;
@@ -104,30 +117,71 @@ public class TunnelNavigator {
 								.add(blockers.get(i).get(k)));
 					}
 				}	
-			}	
+			}
 		}
     }
-
-    private int getShortestPath() {
+	
+	private void printDistances() {
         specialLocations.keySet()
+        .stream()
+        .map(specialLocations::get)
+        .forEach(l1 -> 
+            specialLocations.keySet()
             .stream()
             .map(specialLocations::get)
-            .forEach(l1 -> 
-                specialLocations.keySet()
-                .stream()
-                .map(specialLocations::get)
-                .forEach(l2 -> 
-                    System.out.println("l1: "
-                        + l1.toString()
-                        + "\tl2: "
-                        + l2.toString()
-                        + "\tDistance: "
-                        + getDistance(l1, l2)
-                        + "\tBlockers: "
-                        + getBlocker(l1, l2)
-                        + "\t")));
-        return 0;
+            .forEach(l2 -> 
+                System.out.println("l1: "
+                    + l1.toString()
+                    + "\tl2: "
+                    + l2.toString()
+                    + "\tDistance: "
+                    + getDistance(l1, l2)
+                    + "\tBlockers: "
+                    + getBlockers(l1, l2)
+                    + "\t")));
+	}
+
+    private int getShortestPath() {
+    	List<Character> keys = specialLocations.keySet().stream()
+    		.filter(Character::isLowerCase)
+    		.collect(Collectors.toList());
+    	keys.add(0, '@');
+        return getShortestPathOfPermutation(keys, new HashSet<>(), 1);
     }
+
+	private int getShortestPathOfPermutation(List<Character> keys, Set<Character> collectedKeys, int i) {
+		Character temp;
+		int minimalDistance = Integer.MAX_VALUE;
+		int currentPathLength;
+		
+		if (i == keys.size()) {
+			return 0;
+		}
+		
+		for (int j = i; j < keys.size(); j++) {
+			if (getBlockers(specialLocations.get(keys.get(i-1)), specialLocations.get(keys.get(j)))
+					.doesNotBlock(collectedKeys)) {
+				temp = keys.get(i);
+				keys.set(i, keys.get(j));
+				keys.set(j, temp);
+				collectedKeys.add(keys.get(i));
+				
+				currentPathLength = Integer.min( 
+											getShortestPathOfPermutation(keys, collectedKeys, i + 1)
+												+ getDistance(specialLocations.get(keys.get(i-1)), specialLocations.get(keys.get(i)))
+											, MAX);
+				if (minimalDistance > currentPathLength) {
+					minimalDistance = currentPathLength;
+				}
+				
+				collectedKeys.remove(keys.get(i));
+				temp = keys.get(i);
+				keys.set(i, keys.get(j));
+				keys.set(j, temp);
+			}
+		}
+		return minimalDistance;
+	}
 
 	private char grid(int i, int j) {
     	return grid.get(Pair.with(i, j));
@@ -137,7 +191,7 @@ public class TunnelNavigator {
 		return distances.getOrDefault(i, new HashMap<>()).getOrDefault(j, MAX);
 	}
 
-    private Blockers getBlocker(Pair<Integer, Integer> i, Pair<Integer, Integer> j) {
+    private Blockers getBlockers(Pair<Integer, Integer> i, Pair<Integer, Integer> j) {
 		return blockers.getOrDefault(i, new HashMap<>()).getOrDefault(j, new Blockers());
 	}
 }

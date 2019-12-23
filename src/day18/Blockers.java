@@ -2,6 +2,7 @@ package day18;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -31,4 +32,11 @@ public class Blockers implements Iterable<Character> {
     public Iterator<Character> iterator() {
         return doors.iterator();
     }
+
+	public boolean doesNotBlock(Set<Character> keys) {
+		return doors.stream()
+			.map(Character::toLowerCase)
+			.map(keys::contains)
+			.allMatch(b -> b);
+	}
 }
