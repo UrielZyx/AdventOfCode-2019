@@ -65,7 +65,7 @@ public class TractorBeam {
 
 	private void checkPoint() {
 		new IntcodeMachine(program)
-			.replaceInput(Arrays.asList(i, j))
+			.addInput(Arrays.asList(i, j))
 			.setOutputHandler(o -> grid.put(Pair.with(i, j), o))
 			.runProgram();
 	}

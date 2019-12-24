@@ -49,7 +49,7 @@ public class SpringDroid {
 
     public void run(boolean shouldRun) {
         String program = shouldRun? SPRING_DROID_PROGRAM_RUN: SPRING_DROID_PROGRAM_WALK;
-        machine.replaceInput(program
+        machine.addInput(program
                                 .chars()
                                 .mapToObj(Integer::valueOf)
                                 .collect(Collectors.toList()))

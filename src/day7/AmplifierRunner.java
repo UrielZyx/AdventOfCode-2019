@@ -73,7 +73,7 @@ public class AmplifierRunner {
 
         updatePhaseForFirstTime(io, i, phases, isFinalValue);
 
-        IntcodeMachine machine = machines.get(i % phases.size()).replaceInput(io);
+        IntcodeMachine machine = machines.get(i % phases.size()).addInput(io);
         amplifierHalted = machine.runProgram();
         if (feedbackLoopMode) {
             isFinalValue = Boolean.logicalAnd(isFinalValue, amplifierHalted);
@@ -87,7 +87,7 @@ public class AmplifierRunner {
     private void updatePhaseForFirstTime(List<Integer> io, int i, List<Integer> phases, boolean isFinalValue) {
         if (isFirstTime) {
             io.add(0, phases.get(i));   
-            machines.put(i, new IntcodeMachine(program.clone()).replaceInput(io));
+            machines.put(i, new IntcodeMachine(program.clone()).addInput(io));
         }
         if (isFinalValue) {
             isFirstTime = false;

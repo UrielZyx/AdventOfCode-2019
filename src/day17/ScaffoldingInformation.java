@@ -55,7 +55,7 @@ public class ScaffoldingInformation {
 			in.add((int)inputs.charAt(i));
 		}
 		machine
-			.replaceInput(in)
+			.addInput(in)
 			.setOutputHandler(o -> System.out.print((char)o.intValue()))
 			.runProgram();
 		out = machine.getOutput();

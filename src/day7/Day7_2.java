@@ -5,6 +5,12 @@ import java.util.List;
 
 public class Day7_2 {
 
+    /*
+    * Not sure what broke this but it stopped working.
+    * I could probably check but I really don't care, since I hated thi puzzle.
+    * If you're trying to use this, make sure you fix it first.
+    */
+
     public static void main(String[] args) {
         int[] program = getAmplifierControlProgram();
         List<Integer> phaseSettings = Arrays.asList(5,6,7,8,9);

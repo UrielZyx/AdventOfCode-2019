@@ -29,7 +29,7 @@ public class IntcodeMachine {
 	}
 	
 	private Map<Long,Long> memory = new HashMap<>();
-	private Iterable<Long> input = new ArrayList<>();
+	private List<Long> input = new ArrayList<>();
 	private List<Long> output = new ArrayList<>();
 	long relativeBase = 0;
 	Iterator<Long> inputIterator = input.iterator();
@@ -114,11 +114,13 @@ public class IntcodeMachine {
 	}
 	
 	public long getNextInput() {
-		return inputIterator.next();
+		long result = inputIterator.next();
+		inputIterator.remove();
+		return result;
 	}
 	
-	public IntcodeMachine replaceInput(List<? extends Number> newInput) {
-		this.input = toLongList(newInput);
+	public IntcodeMachine addInput(List<? extends Number> newInput) {
+		this.input.addAll(toLongList(newInput));
 		inputIterator = this.input.iterator();
 		return this;
 	}
