@@ -1,4 +1,4 @@
-package day3;
+package myMath;
 
 import org.javatuples.Pair;
 
@@ -8,7 +8,7 @@ public enum Direction {
 	U (Pair.with(0,1)),
 	D (Pair.with(0,-1));
 	
-	Pair<Integer, Integer> directionVector;
+	public Pair<Integer, Integer> directionVector;
 	
 	private Direction(Pair<Integer, Integer> directionVector) {
 		this.directionVector=directionVector;

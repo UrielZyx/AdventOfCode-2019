@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.javatuples.Pair;
 
+import myMath.Direction;
+
 public class WirePath implements Iterable<Pair<Direction,Integer>>{
 	
 	List<Pair<Direction,Integer>> path = new ArrayList<>();;

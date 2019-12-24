@@ -4,6 +4,8 @@ import java.util.HashMap;
 
 import org.javatuples.Pair;
 
+import myMath.Direction;
+
 public abstract class IntersectionFinder {
 	
 	private HashMap<Pair<Integer, Integer>,Integer> wire = new HashMap<>();
