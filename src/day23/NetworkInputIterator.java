@@ -30,6 +30,7 @@ public class NetworkInputIterator implements Iterator<Long>{
         if (controller.inputs.getOrDefault(index, new LinkedList<>()).isEmpty()) {
             return -1L;
         }
+        System.out.println("machine: " + index + ", input: " + controller.inputs.get(index).peek());
         return controller.inputs.get(index).poll();
     }
 

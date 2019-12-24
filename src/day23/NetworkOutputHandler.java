@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class NetworkOutputHandler implements Consumer<Long>{
 
@@ -22,14 +23,16 @@ public class NetworkOutputHandler implements Consumer<Long>{
                 controller.inputs.keySet().stream()
                     .map(controller.inputs::get)
                     .forEach(q -> q.add(-1L));
-                System.out.println(outputs.get(2));
-            } else {
-                while (!controller.inputs.containsKey(outputs.get(0).intValue()));
+                System.out.println("************************" + outputs.get(2));
+            } else if (outputs.get(0) < NetworkController.NUMBER_OF_MACHINES) {
+                System.out.println("Output: " + outputs.stream().map(Object::toString).collect(Collectors.joining(", ")));
                 controller.inputs
                     .get(outputs.get(0).intValue())
                     .addAll(
                         Arrays.asList(outputs.get(1), 
                         outputs.get(2)));
+            } else {
+                System.out.println(outputs.stream().map(Object::toString).collect(Collectors.joining(", ")));
             }
             outputs = new ArrayList<>();
         }

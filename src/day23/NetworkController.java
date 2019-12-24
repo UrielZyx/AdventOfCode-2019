@@ -23,10 +23,14 @@ public class NetworkController {
 	}
 
 	public void runMachines() {
+
+        
+        IntStream.range(0, NUMBER_OF_MACHINES)
+            .forEach(i -> inputs.put(i, new LinkedList<>()));
+
         IntStream.range(0, NUMBER_OF_MACHINES)
             .parallel()
             .forEach(i -> {
-                inputs.put(i, new LinkedList<>());
                 machines.put(i, new IntcodeMachine(program));
                 machines.get(i)
                     .setInputIterator(new NetworkInputIterator(this, i))
