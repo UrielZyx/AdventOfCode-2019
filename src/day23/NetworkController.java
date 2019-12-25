@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.IntStream;
@@ -15,9 +16,9 @@ import intcode.IntcodeMachine;
 public class NetworkController {
 
     final static int NUMBER_OF_MACHINES = 50;
-    Set<Integer> initialized = new HashSet<>();
-    Map<Integer ,Queue<Long>> inputs = new HashMap<>();
-    Map<Integer ,Thread> threads = new HashMap<>();
+    Map<Integer, Boolean> initialized = new ConcurrentHashMap<>();
+    Map<Integer ,Queue<Long>> inputs = new ConcurrentHashMap<>();
+    Map<Integer ,Thread> threads = new ConcurrentHashMap<>();
     String program;
 
 	public NetworkController(String program) {
@@ -26,7 +27,7 @@ public class NetworkController {
 
 	public void runMachines() {
 
-		ExecutorService executor = Executors.newFixedThreadPool(50);
+		ExecutorService executor = Executors.newFixedThreadPool(NUMBER_OF_MACHINES);
         
         IntStream.range(0, NUMBER_OF_MACHINES)
             .forEach(i -> inputs.put(i, new LinkedList<>()));

@@ -23,7 +23,7 @@ public class NetworkOutputHandler implements Consumer<Long>{
                 controller.inputs.keySet().stream()
                     .map(controller.inputs::get)
                     .forEach(q -> q.add(null));
-                System.out.println("************************" + outputs.get(2));
+                System.out.println(outputs.get(2));
             } else if (outputs.get(0) < NetworkController.NUMBER_OF_MACHINES) {
                 System.out.println("Output: " + outputs.stream().map(Object::toString).collect(Collectors.joining(", ")));
                 controller.inputs
