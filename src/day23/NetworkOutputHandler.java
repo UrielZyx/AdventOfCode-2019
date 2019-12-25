@@ -24,15 +24,13 @@ public class NetworkOutputHandler implements Consumer<Long>{
                     .map(controller.inputs::get)
                     .forEach(q -> q.add(null));
                 System.out.println(outputs.get(2));
-            } else if (outputs.get(0) < NetworkController.NUMBER_OF_MACHINES) {
-                System.out.println("Output: " + outputs.stream().map(Object::toString).collect(Collectors.joining(", ")));
+            } else {
+                // System.out.println("Output: " + outputs.stream().map(Object::toString).collect(Collectors.joining(", ")));
                 controller.inputs
                     .get(outputs.get(0).intValue())
                     .addAll(
                         Arrays.asList(outputs.get(1), 
                         outputs.get(2)));
-            } else {
-                System.out.println(outputs.stream().map(Object::toString).collect(Collectors.joining(", ")));
             }
             outputs = new ArrayList<>();
         }
