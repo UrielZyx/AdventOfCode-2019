@@ -15,7 +15,8 @@ public class NetworkInputIterator implements Iterator<Long>{
 
 	@Override
     public boolean hasNext() {
-        if (!controller.inputs.getOrDefault(index, new LinkedList<>()).isEmpty() && controller.inputs.get(index).peek() == -1) {
+        if (!controller.inputs.getOrDefault(index, new LinkedList<>()).isEmpty() && controller.inputs.get(index).peek() == null) {
+        	System.out.println("Machine " + index + " is exiting!");
             return false;
         }
         return true;
