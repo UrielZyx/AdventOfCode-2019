@@ -81,8 +81,12 @@ public class Deck {
 
 	public void findOrigin(long i, long numberOfIterations) {
         BigInteger t = BigInteger.valueOf(i);
+        BigInteger orig = BigInteger.valueOf(i);
         for (long j = 0; j < numberOfIterations; j++) {
             t = findOrigin(t);
+            if (t.compareTo(orig) == 0) {
+                System.out.println(t);
+            }
         }
         System.out.println(t);
 	}

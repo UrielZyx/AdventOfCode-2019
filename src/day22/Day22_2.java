@@ -18,7 +18,7 @@ public class Day22_2 {
             e.printStackTrace();
         }
         // deck.findOrigin(3, 1);
-        deck.findOrigin(2020, 1);
+        deck.findOrigin(2020, 100000);
         // deck.findOrigin(2020, 101741582076661L);
         System.out.println(System.currentTimeMillis() - start);
         //1498
