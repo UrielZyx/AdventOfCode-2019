@@ -2,7 +2,9 @@ package day22;
 
 import java.math.BigInteger;
 
+import org.javatuples.Pair;
+
 @FunctionalInterface
 public interface Permutation {
-    BigInteger apply (BigInteger deckSize, BigInteger position, BigInteger parameter);
+    Pair<BigInteger, BigInteger> apply (BigInteger deckSize, BigInteger parameter);
 }

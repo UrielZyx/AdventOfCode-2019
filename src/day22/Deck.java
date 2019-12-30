@@ -10,18 +10,24 @@ import org.javatuples.Pair;
 public class Deck {
 
     final static BigInteger ZERO = BigInteger.valueOf(0);
+    final static BigInteger MINUS_ONE = BigInteger.valueOf(-1);
     final static BigInteger ONE = BigInteger.valueOf(1);
     final static BigInteger TWO = BigInteger.valueOf(2);
 
     enum Technique {
-        NEW_STACK ((size, position, parameter) -> size.subtract(position.add(ONE))),
+        NEW_STACK ((size, parameter) -> Pair.with(MINUS_ONE, size.subtract(ONE))),
+        //size - 1 - position
         CUT (
-            (size, position, parameter) -> (position.subtract(parameter).add(size)).remainder(size), 
-            (size, position, parameter) -> (position.add(parameter).add(size)).remainder(size)
+            (size, parameter) -> Pair.with(ONE, size.subtract(parameter)),
+            //position - parameter + size 
+            (size, parameter) -> Pair.with(ONE, size.add(parameter))
+            //position + parameter + size
         ),
         INCREMENT (
-            (size, position, parameter) -> (position.multiply(parameter)).remainder(size),
-            (size, position, parameter) -> (position.multiply(reciprocal(parameter, size))).remainder(size)
+            (size, parameter) -> Pair.with(parameter, ZERO),
+            //position * parameter
+            (size, parameter) -> Pair.with(reciprocal(parameter, size), ZERO)
+            //position * reciprocal(parameter, size)
         );
 
         Permutation permute;
@@ -49,6 +55,8 @@ public class Deck {
 
     BigInteger deckSize;
     List<Pair<Technique, BigInteger>> techniques = new ArrayList<>();
+    Pair<BigInteger, BigInteger> shufflePermutation = Pair.with(ONE, ZERO);
+    Pair<BigInteger, BigInteger> reverseShufflePermutation = Pair.with(ONE, ZERO);
 
 	public Deck(long size) {
         deckSize = BigInteger.valueOf(size);
@@ -69,14 +77,23 @@ public class Deck {
             }
             techniques.add(Pair.with(technique, parameter));
         }
+        for (int i = 0; i < techniques.size(); i++) {
+            shufflePermutation = composePermutation(
+                                    shufflePermutation, 
+                                    getPermutation(techniques.get(i)));
+            reverseShufflePermutation = composePermutation(
+                                    reverseShufflePermutation, 
+                                    getReverse(techniques.get(techniques.size() - i - 1)));
+        }
 	}
 
-	public void shuffle(long i) {
+    public void shuffle(long i) {
         BigInteger index = BigInteger.valueOf(i);
-        for (Pair<Technique, BigInteger> p : techniques) {
-            index = p.getValue0().permute.apply(deckSize, index, p.getValue1());
-        }
-        System.out.println(index);
+        System.out.println(index
+                            .multiply(shufflePermutation.getValue0())
+                            .add(shufflePermutation.getValue1())
+                            .mod(deckSize)
+        );
 	}
 
 	public void findOrigin(long i, long numberOfIterations) {
@@ -95,7 +112,7 @@ public class Deck {
         Pair<Technique, BigInteger> p;
         for (int j = techniques.size() - 1; j >= 0; j--) {
             p = techniques.get(j);
-            i = p.getValue0().reverse.apply(deckSize, i, p.getValue1());
+            // i = p.getValue0().reverse.apply(deckSize, i, p.getValue1());
         }
         return i;
 	}
@@ -120,5 +137,25 @@ public class Deck {
             powers.pop();
         }
         return result;
+    }
+
+    private Pair<BigInteger, BigInteger> getPermutation(Pair<Technique, BigInteger> pair) {
+        return pair.getValue0().permute.apply(deckSize, pair.getValue1());
+    }
+
+    private Pair<BigInteger, BigInteger> getReverse(Pair<Technique, BigInteger> pair) {
+        return pair.getValue0().reverse.apply(deckSize, pair.getValue1());
+    }
+
+	private Pair<BigInteger, BigInteger> composePermutation(Pair<BigInteger, BigInteger> original,
+    Pair<BigInteger, BigInteger> additional) {
+        BigInteger a, b, c, d, alpha, beta;
+        a = original.getValue0();
+        b = original.getValue1();
+        c = additional.getValue0();
+        d = additional.getValue1();
+        alpha = a.multiply(c).mod(deckSize);
+        beta = b.multiply(c).add(d).mod(deckSize);
+        return Pair.with(alpha, beta);
     }
 }
