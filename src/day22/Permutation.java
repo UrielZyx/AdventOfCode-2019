@@ -1,6 +1,8 @@
 package day22;
 
+import java.math.BigInteger;
+
 @FunctionalInterface
 public interface Permutation {
-    long apply (long deckSize, long position, long parameter);
+    BigInteger apply (BigInteger deckSize, BigInteger position, BigInteger parameter);
 }

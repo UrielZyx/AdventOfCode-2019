@@ -1,5 +1,6 @@
 package day22;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -8,15 +9,19 @@ import org.javatuples.Pair;
 
 public class Deck {
 
+    final static BigInteger ZERO = BigInteger.valueOf(0);
+    final static BigInteger ONE = BigInteger.valueOf(1);
+    final static BigInteger TWO = BigInteger.valueOf(2);
+
     enum Technique {
-        NEW_STACK ((size, position, parameter) -> size - position - 1),
+        NEW_STACK ((size, position, parameter) -> size.subtract(position.add(ONE))),
         CUT (
-            (size, position, parameter) -> (position - parameter + size) % size, 
-            (size, position, parameter) -> (position + parameter + size) % size
+            (size, position, parameter) -> (position.subtract(parameter).add(size)).remainder(size), 
+            (size, position, parameter) -> (position.add(parameter).add(size)).remainder(size)
         ),
         INCREMENT (
-            (size, position, parameter) -> (position * parameter) % size,
-            (size, position, parameter) -> (position * reciprocal(parameter, size)) % size
+            (size, position, parameter) -> (position.multiply(parameter)).remainder(size),
+            (size, position, parameter) -> (position.multiply(reciprocal(parameter, size))).remainder(size)
         );
 
         Permutation permute;
@@ -42,23 +47,23 @@ public class Deck {
         }
     }
 
-    long deckSize;
-    List<Pair<Technique, Long>> techniques = new ArrayList<>();
+    BigInteger deckSize;
+    List<Pair<Technique, BigInteger>> techniques = new ArrayList<>();
 
 	public Deck(long size) {
-        deckSize = size;
+        deckSize = BigInteger.valueOf(size);
 	}
 
     public void setShufflingMethod(List<String> input) {
         String[] splitLine;
         Technique technique;
-        long parameter;
+        BigInteger parameter;
         for (String line : input) {
             splitLine = line.split(" ");
             technique = Technique.valueOf(splitLine);
-            parameter = 0;
+            parameter = ZERO;
             try{
-                parameter = Long.parseLong(splitLine[splitLine.length - 1]);
+                parameter = BigInteger.valueOf(Long.parseLong(splitLine[splitLine.length - 1]));
             } catch (Exception e){
                 //Nothing
             }
@@ -67,22 +72,23 @@ public class Deck {
 	}
 
 	public void shuffle(long i) {
-        for (Pair<Technique, Long> p : techniques) {
-            i = p.getValue0().permute.apply(deckSize, i, p.getValue1());
+        BigInteger index = BigInteger.valueOf(i);
+        for (Pair<Technique, BigInteger> p : techniques) {
+            index = p.getValue0().permute.apply(deckSize, index, p.getValue1());
         }
-        System.out.println(i);
+        System.out.println(index);
 	}
 
 	public void findOrigin(long i, long numberOfIterations) {
-        long t = i;
+        BigInteger t = BigInteger.valueOf(i);
         for (long j = 0; j < numberOfIterations; j++) {
             t = findOrigin(t);
         }
         System.out.println(t);
 	}
 
-	public long findOrigin(long i) {
-        Pair<Technique, Long> p;
+	public BigInteger findOrigin(BigInteger i) {
+        Pair<Technique, BigInteger> p;
         for (int j = techniques.size() - 1; j >= 0; j--) {
             p = techniques.get(j);
             i = p.getValue0().reverse.apply(deckSize, i, p.getValue1());
@@ -90,21 +96,21 @@ public class Deck {
         return i;
 	}
 
-	public static long reciprocal(long parameter, long size) {
-        Stack<Long> powers = new Stack<>();
-        Stack<Long> powerCounters = new Stack<>();
-        long result = 1;
-        long resultCounter = 0;
+	public static BigInteger reciprocal(BigInteger parameter, BigInteger size) {
+        Stack<BigInteger> powers = new Stack<>();
+        Stack<BigInteger> powerCounters = new Stack<>();
+        BigInteger result = ONE;
+        BigInteger resultCounter = ZERO;
         powers.push(parameter);
-        powerCounters.push(1L);
-        while (powerCounters.peek() < size - 2) {
-            powers.push((powers.peek() * powers.peek()) % size);
-            powerCounters.push(powerCounters.peek() * 2);
+        powerCounters.push(ONE);
+        while (powerCounters.peek().compareTo(size.subtract(TWO)) < 0) {
+            powers.push((powers.peek().multiply(powers.peek())).remainder(size));
+            powerCounters.push(powerCounters.peek().multiply(TWO));
         }
-        while (resultCounter < size - 2) {
-            if (resultCounter + powerCounters.peek() <= size - 2) {
-                resultCounter += powerCounters.peek();
-                result = (result * powers.peek()) % size;
+        while (resultCounter.compareTo(size.subtract(TWO)) < 0) {
+            if (resultCounter.add(powerCounters.peek()).compareTo(size.subtract(TWO)) <= 0) {
+                resultCounter = resultCounter.add(powerCounters.peek());
+                result = (result.multiply(powers.peek())).remainder(size);
             }
             powerCounters.pop();
             powers.pop();
