@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public class Day20_1 {
 	public static void main(String[] args) {
-		Maze maze = new Maze(linesOf("C:\\urm\\advent-of-code\\AdventOfCode-2019\\src\\day20\\puzzle input.txt"));
+		Maze maze = new Maze(linesOf("C:\\Users\\U6067204\\Projects\\AdventOfCode-2019\\AdventOfCode-2019\\src\\day20\\puzzle input.txt"));
 		System.out.println(maze.shortestPath());
 	}
 
